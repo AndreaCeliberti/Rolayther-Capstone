@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 namespace Rolayther.Models.Entities
 {
-    public class Genre
+    public class Genre : BaseEntity
     {
         [Key]
         public Guid GenreId { get; set; }

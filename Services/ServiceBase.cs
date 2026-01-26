@@ -1,4 +1,5 @@
 ﻿using Rolayther.Data;
+using Rolayther.Models.Entities;
 
 namespace Rolayther.Services
 {
@@ -25,6 +26,19 @@ namespace Rolayther.Services
             }
 
             return result;
+        }
+        protected async Task<bool> SoftDeleteAsync<T>(Guid id) where T : BaseEntity
+        {
+            var entity = await _context.Set<T>().FindAsync(id);
+
+            if (entity == null)
+                return false;
+
+            entity.IsDeleted = true;
+
+            _context.Set<T>().Update(entity);
+
+            return await SaveAsync();
         }
     }
 }

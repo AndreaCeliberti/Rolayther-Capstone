@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 namespace Rolayther.Models.Entities
 {
-    public class Platform
+    public class Platform : BaseEntity
     {
         [Key]
         public Guid PlatformId { get; set; }

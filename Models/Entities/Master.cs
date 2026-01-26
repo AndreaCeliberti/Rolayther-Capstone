@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Rolayther.Models.Entities
 {
-    public class Master
+    public class Master : BaseEntity
     {
         [Key]
         public Guid MasterId { get; set; }

@@ -143,7 +143,7 @@ namespace Rolayther.Helpers
                         Name = "Admin",
                         LastName = "Rolayther",
                         Email = StringConstants.AdminEmail,
-                        Username = "AdminRolayther",
+                        UserName = "AdminRolayther",
                         IsDeleted = false,
                     };
                     //password di default

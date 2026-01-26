@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 namespace Rolayther.Models.Entities
 {
-    public class Game
+    public class Game : BaseEntity
     {
         [Key]
         public Guid GameId { get; set; }
@@ -12,7 +12,7 @@ namespace Rolayther.Models.Entities
         
         [MaxLength(1000)]
         public string Description { get; set; }
-        public string ? CoverImageUrl { get; set; }
+        public string? CoverImageUrl { get; set; }
         public ICollection<Genre> Genres { get; set; }  
 
 

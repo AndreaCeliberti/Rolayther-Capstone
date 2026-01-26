@@ -15,5 +15,19 @@ namespace Rolayther.Data
         public DbSet<Platform> Platforms { get; set; }
         public DbSet<Master> Masters { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder); 
+
+            modelBuilder.Entity<Game>()
+                .HasQueryFilter(g => !g.IsDeleted);
+
+            modelBuilder.Entity<Genre>()
+                .HasQueryFilter(g => !g.IsDeleted);
+
+            // aggiungi qui altre entità che useranno la soft delete
+        }
     }
 }

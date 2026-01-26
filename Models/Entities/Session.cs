@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 namespace Rolayther.Models.Entities
 {
-    public class Session
+    public class Session : BaseEntity
     {
         [Key]
         public Guid SessionId { get; set; }

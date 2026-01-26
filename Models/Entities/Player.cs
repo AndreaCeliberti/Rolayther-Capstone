@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 namespace Rolayther.Models.Entities
 {
-    public class Player
+    public class Player : BaseEntity
     {
         [Key]
         public Guid PlayerId { get; set; }
