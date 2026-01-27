@@ -27,6 +27,18 @@ namespace Rolayther.Data
             modelBuilder.Entity<Genre>()
                 .HasQueryFilter(g => !g.IsDeleted);
 
+            modelBuilder.Entity<Master>()
+                .HasQueryFilter(m => !m.IsDeleted);
+
+            modelBuilder.Entity<Platform>()
+                .HasQueryFilter(p => !p.IsDeleted);
+
+            modelBuilder.Entity<Player>()
+                .HasQueryFilter(p => !p.IsDeleted);
+
+            modelBuilder.Entity<Session>()
+                .HasQueryFilter(s => !s.IsDeleted);
+
             // aggiungi qui altre entità che useranno la soft delete
         }
     }

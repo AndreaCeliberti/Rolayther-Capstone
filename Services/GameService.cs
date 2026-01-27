@@ -9,7 +9,7 @@ namespace Rolayther.Services
     {
         public GameService(ApplicationDbContext applicationDbContext) : base(applicationDbContext) { }
 
-        // Lista Games
+        // List Games
         public async Task <List<Game>> GetAllGames()
         {
             return await _context.Games
