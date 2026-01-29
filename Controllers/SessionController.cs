@@ -1,7 +1,8 @@
-﻿using Rolayther.Models.DTOs.Request;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Rolayther.Models.DTOs.Request;
 using Rolayther.Services;
+using System.Security.Claims;
 
 namespace Rolayther.Controllers
 {
@@ -67,6 +68,23 @@ namespace Rolayther.Controllers
             {
                 return BadRequest(new { Message = "Failed to delete session." });
             }
+        }
+
+        // Change session state
+
+        [Authorize(Roles = "Admin, Master")]
+        [HttpPost("{sessionId}/ChangeState")]
+        public async Task<IActionResult> ChangeState(Guid sessionId, ChangeSessionStateDto dto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var role = User.FindFirstValue(ClaimTypes.Role);
+
+            var result = await _sessionService.ChangeSessionState(sessionId, dto.NewState, userId, role, dto.Reason);
+
+            if (!result)
+                return BadRequest("State change failed");
+
+            return Ok("State updated");
         }
 
     }

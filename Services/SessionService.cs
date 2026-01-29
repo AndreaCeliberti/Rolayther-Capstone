@@ -2,6 +2,8 @@
 using Rolayther.Data;
 using Rolayther.Models.DTOs.Request;
 using Rolayther.Models.Entities;
+using Rolayther.Models.Enums;
+using System.Security.Claims;
 
 namespace Rolayther.Services
 {
@@ -58,9 +60,26 @@ namespace Rolayther.Services
         }
 
         //Soft delete
+
         public Task<bool> DeleteSession(Guid sessionId)
         {
             return SoftDeleteAsync<Session>(sessionId);
+        }
+
+        // Change Session State
+
+        public async Task<bool> ChangeSessionState(Guid sessionId, SessionState newState, string userId, string role, string? reason)
+        {
+            var session = await _context.Sessions
+                .Include(s => s.StateHistory)
+                .FirstOrDefaultAsync(s => s.SessionId == sessionId);
+
+            if (session == null)
+                return false;
+
+            session.ChangeState(newState, userId, role, reason);
+
+            return await SaveAsync();
         }
     }
 }

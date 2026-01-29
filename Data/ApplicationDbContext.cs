@@ -15,11 +15,13 @@ namespace Rolayther.Data
         public DbSet<Platform> Platforms { get; set; }
         public DbSet<Master> Masters { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
-
+        public DbSet<SessionStateHistory> SessionStateHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); 
+            base.OnModelCreating(modelBuilder);
+
+            // Soft delete global query filters
 
             modelBuilder.Entity<Game>()
                 .HasQueryFilter(g => !g.IsDeleted);
@@ -39,7 +41,16 @@ namespace Rolayther.Data
             modelBuilder.Entity<Session>()
                 .HasQueryFilter(s => !s.IsDeleted);
 
-            // aggiungi qui altre entità che useranno la soft delete
+            // add here other entities that will use soft delete
+
+            //===================================================//
+
+            // Configure SessionStateHistory relationship
+
+            modelBuilder.Entity<SessionStateHistory>()
+                .HasOne(h => h.Session)
+                .WithMany(s => s.StateHistory)
+                .HasForeignKey(h => h.SessionId);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Rolayther.Models.Entities;
+using Rolayther.Models.Enums;
 
 namespace Rolayther.Models.DTOs.Response
 {
@@ -15,5 +16,6 @@ namespace Rolayther.Models.DTOs.Response
         public Guid GameId { get; set; }
         public Guid GenreId { get; set; }
         public ICollection<Player> Players { get; set; }
+        public SessionState CurrentState { get; set; }
     }
 }
