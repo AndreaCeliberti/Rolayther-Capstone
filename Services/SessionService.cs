@@ -81,5 +81,60 @@ namespace Rolayther.Services
 
             return await SaveAsync();
         }
+
+        // Add player to session
+        public async Task<bool> AddPlayerToSession(Guid sessionId, Guid playerId)
+        {
+            var session = await _context.Sessions
+                .Include(s => s.Players)
+                .Include(s => s.StateHistory)
+                .FirstOrDefaultAsync(s => s.SessionId == sessionId);
+
+            if (session == null)
+                return false;
+
+            var player = await _context.Players.FindAsync(playerId);
+            if (player == null)
+                return false;
+
+            try
+            {
+                session.AddPlayer(player);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return await SaveAsync();
+        }
+
+        // Remove player from session
+        public async Task<bool> RemovePlayerFromSession(Guid sessionId, Guid playerId)
+        {
+            var session = await _context.Sessions
+                .Include(s => s.Players)
+                .Include(s => s.StateHistory)
+                .FirstOrDefaultAsync(s => s.SessionId == sessionId);
+
+            if (session == null)
+                return false;
+
+            var player = session.Players.FirstOrDefault(p => p.PlayerId == playerId);
+            if (player == null)
+                return false;
+
+            try
+            {
+                session.RemovePlayer(player);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return await SaveAsync();
+        }
+
     }
 }

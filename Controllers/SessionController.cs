@@ -87,5 +87,33 @@ namespace Rolayther.Controllers
             return Ok("State updated");
         }
 
+        // Join session
+
+        [Authorize]
+        [HttpPost("{sessionId}/Join/{playerId}")]
+        public async Task<IActionResult> JoinSession(Guid sessionId, Guid playerId)
+        {
+            var result = await _sessionService.AddPlayerToSession(sessionId, playerId);
+
+            if (!result)
+                return BadRequest("Unable to join session");
+
+            return Ok(new { Message = "Player added to session" });
+        }
+
+        // Leave session
+
+        [Authorize]
+        [HttpPost("{sessionId}/Leave/{playerId}")]
+        public async Task<IActionResult> LeaveSession(Guid sessionId, Guid playerId)
+        {
+            var result = await _sessionService.RemovePlayerFromSession(sessionId, playerId);
+
+            if (!result)
+                return BadRequest("Unable to leave session");
+
+            return Ok(new { Message = "Player removed from session" });
+        }
+
     }
 }

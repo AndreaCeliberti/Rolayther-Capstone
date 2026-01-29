@@ -63,4 +63,41 @@ public class Session : BaseEntity
         CurrentState = newState;
         StateHistory.Add(historyEntry);
     }
+
+    // Add player to session
+
+    public void AddPlayer(Player player)
+    {
+        if (CurrentState != SessionState.Published)
+            throw new InvalidOperationException("Cannot join a session that is not published.");
+
+        if (Players.Count >= NumbOfPlayer)
+            throw new InvalidOperationException("Session is already full.");
+
+        Players.Add(player);
+
+        // Transition to Full if max players reached
+
+        if (Players.Count == NumbOfPlayer)
+        {
+            ChangeState(SessionState.Full, "SYSTEM", "System", "Session reached max number of players");
+        }
+    }
+
+    // Remove player from session
+
+    public void RemovePlayer(Player player)
+    {
+        if (!Players.Contains(player))
+            throw new InvalidOperationException("Player not in session.");
+
+        Players.Remove(player);
+
+        // if session was full and now has slots available, change state back to Published
+
+        if (CurrentState == SessionState.Full && Players.Count < NumbOfPlayer)
+        {
+            ChangeState(SessionState.Published, "SYSTEM", "System", "Player left session, slots available");
+        }
+    }
 }
