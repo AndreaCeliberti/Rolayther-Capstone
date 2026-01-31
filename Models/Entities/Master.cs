@@ -28,7 +28,6 @@ namespace Rolayther.Models.Entities
 
         public ICollection<Game> Games { get; set; }
         public ICollection<Session> Sessions { get; set; }
-        public ICollection<Genre> Genres { get; set; }
         public ICollection<Platform> Platform { get; set; }
     }
 }

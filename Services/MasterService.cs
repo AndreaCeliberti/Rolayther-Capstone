@@ -16,7 +16,7 @@ namespace Rolayther.Services
                 .AsNoTracking()
                 .Include(m => m.Sessions)
                 .Include(m => m.Games)
-                .Include(m => m.Genres)
+                //.Include(m => m.Genres)
                 .Include(m => m.Platform)
                 .Select(m => new Master
                 {
@@ -29,7 +29,7 @@ namespace Rolayther.Services
                     CreatedAt = m.CreatedAt,
                     Sessions = m.Sessions,
                     Games = m.Games,
-                    Genres = m.Genres,
+                    //Genres = m.Genres,
                     Platform = m.Platform
                 })
                 .ToListAsync();
@@ -52,7 +52,7 @@ namespace Rolayther.Services
                 CreatedAt = DateTime.UtcNow,
                 Games = new List<Game>(),
                 Sessions = new List<Session>(),
-                Genres = new List<Genre>(),
+                //Genres = new List<Genre>(),
                 Platform = new List<Platform>()
             };
             _context.Masters.Add(newMaster);

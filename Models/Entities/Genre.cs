@@ -13,10 +13,10 @@ namespace Rolayther.Models.Entities
         [MaxLength(1000)]
         public string Description { get; set; } = string.Empty;
         public string? ImageUrl { get; set; }
-        public Guid MasterId { get; set; }
-        public Master? Master { get; set; }
+        //public Guid MasterId { get; set; }
+        //public Master? Master { get; set; }
+        public Guid GameId { get; set; }
         public Game? Game { get; set; }
-
-
+        
     }
 }

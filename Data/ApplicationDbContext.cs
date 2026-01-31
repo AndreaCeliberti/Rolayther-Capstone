@@ -7,7 +7,8 @@ namespace Rolayther.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)  : base(options) {}
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
         public DbSet<Game> Games { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Session> Sessions { get; set; }
@@ -19,38 +20,82 @@ namespace Rolayther.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Chiamata fondamentale per Identity
             base.OnModelCreating(modelBuilder);
 
-            // Soft delete global query filters
+            // Filtri per Soft Delete
+            modelBuilder.Entity<Game>().HasQueryFilter(g => !g.IsDeleted);
+            modelBuilder.Entity<Genre>().HasQueryFilter(g => !g.IsDeleted);
+            modelBuilder.Entity<Master>().HasQueryFilter(m => !m.IsDeleted);
+            modelBuilder.Entity<Platform>().HasQueryFilter(p => !p.IsDeleted);
+            modelBuilder.Entity<Player>().HasQueryFilter(p => !p.IsDeleted);
+            modelBuilder.Entity<Session>().HasQueryFilter(s => !s.IsDeleted);
 
-            modelBuilder.Entity<Game>()
-                .HasQueryFilter(g => !g.IsDeleted);
+           
 
-            modelBuilder.Entity<Genre>()
-                .HasQueryFilter(g => !g.IsDeleted);
+            // Risoluzione errore "Genre.Sessions" (se EF continua a cercarlo)
+            modelBuilder.Entity<Genre>().Ignore("Sessions");
 
-            modelBuilder.Entity<Master>()
-                .HasQueryFilter(m => !m.IsDeleted);
+            // Configurazione Relazioni per evitare Cicli Cascade
 
-            modelBuilder.Entity<Platform>()
-                .HasQueryFilter(p => !p.IsDeleted);
-
-            modelBuilder.Entity<Player>()
-                .HasQueryFilter(p => !p.IsDeleted);
-
+            // Relazione Session -> Master
             modelBuilder.Entity<Session>()
-                .HasQueryFilter(s => !s.IsDeleted);
+                .HasOne(s => s.Master)
+                .WithMany(m => m.Sessions)
+                .HasForeignKey(s => s.MasterId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            // add here other entities that will use soft delete
+            // Relazione Session -> Genre
+            modelBuilder.Entity<Session>()
+                .HasOne(s => s.Genre)
+                .WithMany()
+                .HasForeignKey(s => s.GenreId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            //===================================================//
+            // Relazione Session -> Game
+            modelBuilder.Entity<Session>()
+                .HasOne(s => s.Game)
+                .WithMany()
+                .HasForeignKey(s => s.GameId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            // Configure SessionStateHistory relationship
+            // Relazione Genre -> Game (esplicita per evitare comportamento di default a cascata)
+            modelBuilder.Entity<Genre>()
+                .HasOne(g => g.Game)
+                .WithMany(gm => gm.Genres)
+                .HasForeignKey(g => g.GameId)
+                .OnDelete(DeleteBehavior.NoAction);
 
+            // Relazione Game -> Master (esplicita, usando la FK nel model Game)
+            modelBuilder.Entity<Game>()
+                .HasOne(g => g.Master)
+                .WithMany(m => m.Games)
+                .HasForeignKey(g => g.MasterId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Relazione Platform -> Master
+            modelBuilder.Entity<Platform>()
+                .HasOne(p => p.Master)
+                .WithMany(m => m.Platform)
+                .HasForeignKey(p => p.MasterId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Relazione many-to-many Session <-> Player: join table esplicita "SessionPlayer" con NO ACTION on delete
+            modelBuilder.Entity<Session>()
+                .HasMany(s => s.Players)
+                .WithMany(p => p.Sessions)
+                .UsingEntity<Dictionary<string, object>>(
+                    "SessionPlayer",
+                    j => j.HasOne<Player>().WithMany().HasForeignKey("PlayerId").OnDelete(DeleteBehavior.NoAction),
+                    j => j.HasOne<Session>().WithMany().HasForeignKey("SessionId").OnDelete(DeleteBehavior.NoAction)
+                );
+
+            // Relazione SessionStateHistory -> Session
             modelBuilder.Entity<SessionStateHistory>()
                 .HasOne(h => h.Session)
                 .WithMany(s => s.StateHistory)
-                .HasForeignKey(h => h.SessionId);
+                .HasForeignKey(h => h.SessionId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

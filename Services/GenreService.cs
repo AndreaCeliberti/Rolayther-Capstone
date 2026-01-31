@@ -20,7 +20,7 @@ namespace Rolayther.Services
                     Name = g.Name,
                     Description = g.Description,
                     ImageUrl = g.ImageUrl,
-                    MasterId = g.MasterId
+                    //MasterId = g.MasterId
                 })
                 .ToListAsync();
         }
@@ -34,7 +34,7 @@ namespace Rolayther.Services
                 Name = genreRequestDto.Name,
                 Description = genreRequestDto.Description,
                 ImageUrl = genreRequestDto.ImageUrl,
-                MasterId = genreRequestDto.MasterId
+                //MasterId = genreRequestDto.MasterId
             };
             _context.Genres.Add(newGenre);
             return await SaveAsync();

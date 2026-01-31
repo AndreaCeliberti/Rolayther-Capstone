@@ -18,10 +18,9 @@ Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
 
-Log.Information("Registering services...");
+builder.Host.UseSerilog();
 
-//Aggiunta di Serilog come provider di logging
-builder.Services.AddSerilog();
+Log.Information("Registering services...");
 
 // Add services to the container.
 
@@ -91,7 +90,7 @@ builder.Services.AddScoped<GameService>();
 builder.Services.AddScoped<MasterService>();
 builder.Services.AddScoped<GenreService>();
 builder.Services.AddScoped<PlatformService>();
-builder.Services.AddScoped<PLayerService>();
+builder.Services.AddScoped<PlayerService>();
 builder.Services.AddScoped<SessionService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
