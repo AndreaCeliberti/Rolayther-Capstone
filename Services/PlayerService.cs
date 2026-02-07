@@ -49,6 +49,37 @@ namespace Rolayther.Services
             return await SaveAsync();
         }
 
+        // Get player
+        public async Task<Player?> GetPlayerById(Guid playerId)
+        {
+            return await _context.Players
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.PlayerId == playerId);
+        }
+
+         // Update player
+        public async Task<bool> UpdatePlayer(Guid playerId, PlayerRequestDto playerRequestDto)
+        {
+            var player = await _context.Players
+                .FirstOrDefaultAsync(p => p.PlayerId == playerId);
+
+            if (player == null)
+                return false;
+
+            player.Name = playerRequestDto.Name;
+            player.Surname = playerRequestDto.Surname;
+            player.NickName = playerRequestDto.NickName;
+            player.DateOfBirth = playerRequestDto.DateOfBirth;
+            player.AvatarImgUrl = playerRequestDto.AvatarImgUrl;
+            player.Email = playerRequestDto.Email;
+            player.BioPlayer = playerRequestDto.BioPlayer;
+
+            _context.Players.Update(player);
+
+            return await SaveAsync();
+        }
+
+
         //Soft delete
         public Task<bool> DeletePlayer(Guid playerId)
         {

@@ -58,6 +58,45 @@ namespace Rolayther.Services
             _context.Masters.Add(newMaster);
             return await SaveAsync();
         }
+
+        // Get Master by Id
+        public async Task<Master?> GetMasterById(Guid masterId)
+        {
+            return await _context.Masters
+                .AsNoTracking()
+                .Include(m => m.Sessions)
+                .Include(m => m.Games)
+                .Include(m => m.Platform)
+                .FirstOrDefaultAsync(m => m.MasterId == masterId);
+        }
+
+        // Update Master
+        public async Task<bool> UpdateMaster(Guid masterId, MasterRequestDto masterRequestDto)
+        {
+            var master = await _context.Masters
+                .Include(m => m.Sessions)
+                .Include(m => m.Games)
+                .Include(m => m.Platform)
+                .FirstOrDefaultAsync(m => m.MasterId == masterId);
+
+            if (master == null)
+                return false;
+
+            master.Name = masterRequestDto.Name;
+            master.Surname = masterRequestDto.Surname;
+            master.NickName = masterRequestDto.NickName;
+            master.DateOfBirth = masterRequestDto.DateOfBirth;
+            master.AvatarImgUrl = masterRequestDto.AvatarImgUrl;
+            master.Email = masterRequestDto.Email;
+            master.BioMaster = masterRequestDto.BioMaster;
+
+            _context.Masters.Update(master);
+
+            return await SaveAsync();
+        }
+
+
+
         //Soft delete
         public Task<bool> DeleteMaster(Guid masterId)
         {

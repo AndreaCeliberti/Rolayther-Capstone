@@ -23,7 +23,7 @@ namespace Rolayther.Controllers
 
         [Authorize]
         [AllowAnonymous]
-        [HttpGet("{gameId}")]
+        [HttpGet("GetAllGames")]
         public async Task<IActionResult> GetAllGames()
         {
             var games = await _gameService.GetAllGames();

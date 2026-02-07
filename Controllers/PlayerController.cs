@@ -19,7 +19,7 @@ namespace Rolayther.Controllers
         // Get all players
 
         [Authorize]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, Master")]
         [HttpGet("GetAllPlayers")]
         public async Task<IActionResult> GetAllPlayers()
         {
@@ -33,7 +33,7 @@ namespace Rolayther.Controllers
 
         // Create a new player
 
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [HttpPost("CreatePlayer")]
         public async Task<IActionResult> CreatePlayer(PlayerRequestDto playerRequestDto)
         {
@@ -51,6 +51,38 @@ namespace Rolayther.Controllers
                 return BadRequest(new { Message = "Failed to create player." });
             }
         }
+
+        // Get player by id
+
+        [Authorize (Roles = "Admin, Player, Master")]
+        [HttpGet("GetPlayer/{playerId}")]
+        public async Task<IActionResult> GetPlayerById(Guid playerId)
+        {
+            var player = await _playerService.GetPlayerById(playerId);
+
+            if (player == null)
+                return NotFound(new { Message = "Player not found." });
+
+            return Ok(player);
+        }
+
+        // Update player
+
+        [Authorize(Roles = "Admin, Player")]
+        [HttpPut("UpdatePlayer/{playerId}")]
+        public async Task<IActionResult> UpdatePlayer(Guid playerId, PlayerRequestDto playerRequestDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid player data.");
+
+            var isUpdated = await _playerService.UpdatePlayer(playerId, playerRequestDto);
+
+            if (isUpdated)
+                return Ok(new { Message = "Player updated successfully." });
+
+            return NotFound(new { Message = "Player not found or update failed." });
+        }
+
 
         // Delete a player
 

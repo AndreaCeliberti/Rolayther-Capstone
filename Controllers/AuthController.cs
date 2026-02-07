@@ -84,7 +84,7 @@ namespace Rolayther.Controllers
             }
 
             // ================== LOGOUT ==================
-            [Authorize]
+            //[Authorize]
             [HttpPost("logout")]
             public async Task<IActionResult> Logout(LogoutDto logout)
             {

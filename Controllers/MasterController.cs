@@ -19,7 +19,7 @@ namespace Rolayther.Controllers
 
         //Get all master
 
-        [Authorize]
+        
         [AllowAnonymous]
         [HttpGet("GetAllMasters")]
         public async Task<IActionResult> GetAllMasters()
@@ -34,7 +34,7 @@ namespace Rolayther.Controllers
 
         // Create a new master
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPost("CreateMaster")]
         public async Task<IActionResult> CreateMaster(MasterRequestDto masterRequestDto)
         {
@@ -52,6 +52,38 @@ namespace Rolayther.Controllers
                 return BadRequest(new { Message = "Failed to create master." });
             }
         }
+
+        // Get master by id
+
+        [Authorize]
+        [HttpGet("GetMaster/{masterId}")]
+        public async Task<IActionResult> GetMasterById(Guid masterId)
+        {
+            var master = await _masterService.GetMasterById(masterId);
+
+            if (master == null)
+                return NotFound(new { Message = "Master not found." });
+
+            return Ok(master);
+        }
+
+        // Update master
+
+        [Authorize(Roles = "Admin, Master")]
+        [HttpPut("UpdateMaster/{masterId}")]
+        public async Task<IActionResult> UpdateMaster(Guid masterId, MasterRequestDto masterRequestDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid master data.");
+
+            var isUpdated = await _masterService.UpdateMaster(masterId, masterRequestDto);
+
+            if (isUpdated)
+                return Ok(new { Message = "Master updated successfully." });
+
+            return NotFound(new { Message = "Master not found or update failed." });
+        }
+
 
         // Delete a master
         [Authorize(Roles = "Admin")]
