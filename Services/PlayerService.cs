@@ -57,7 +57,16 @@ namespace Rolayther.Services
                 .FirstOrDefaultAsync(p => p.PlayerId == playerId);
         }
 
-         // Update player
+        // Get player by email
+
+        public async Task<Player?> GetPlayerByEmail(string email)
+        {
+            return await _context.Players
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Email == email);
+        }
+
+        // Update player
         public async Task<bool> UpdatePlayer(Guid playerId, PlayerRequestDto playerRequestDto)
         {
             var player = await _context.Players

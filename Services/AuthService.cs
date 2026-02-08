@@ -146,6 +146,91 @@ namespace Rolayther.Services
 
         }
 
+        //service per la registrazione del player, con transazione per assicurare la coerenza dei dati tra Identity e Player
+        public async Task<bool> RegisterPlayerAsync(PlayerRequestDto dto)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = dto.Email,
+                    Email = dto.Email
+                };
+
+                var result = await _userManager.CreateAsync(user, dto.Password);
+                if (!result.Succeeded)
+                    return false;
+
+                await _userManager.AddToRoleAsync(user, "Player");
+
+                var player = new Player
+                {
+                    PlayerId = Guid.NewGuid(),
+                    Name = dto.Name,
+                    Surname = dto.Surname,
+                    NickName = dto.NickName,
+                    DateOfBirth = dto.DateOfBirth,
+                    AvatarImgUrl = dto.AvatarImgUrl,
+                    Email = dto.Email,
+                    BioPlayer = dto.BioPlayer,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.Players.Add(player);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                return false;
+            }
+        }
+
+        //service per la registrazione del master, con transazione per assicurare la coerenza dei dati tra Identity e Master
+
+        public async Task<bool> RegisterMasterAsync(MasterRequestDto dto)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = dto.Email,
+                    Email = dto.Email
+                };
+                var result = await _userManager.CreateAsync(user, dto.Password);
+                if (!result.Succeeded)
+                    return false;
+                await _userManager.AddToRoleAsync(user, "Master");
+                var master = new Master
+                {
+                    MasterId = Guid.NewGuid(),
+                    Name = dto.Name,
+                    Surname = dto.Surname,
+                    NickName = dto.NickName,
+                    DateOfBirth = dto.DateOfBirth,
+                    AvatarImgUrl = dto.AvatarImgUrl,
+                    Email = dto.Email,
+                    BioMaster = dto.BioMaster,
+                    CreatedAt = DateTime.UtcNow
+                };
+                _context.Masters.Add(master);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                return false;
+            }
+        }
+
         //service per il login dell'utente
         public async Task<AuthResponseDto> Login(LoginUserDto loginUser)
         {

@@ -1,7 +1,8 @@
-﻿using Rolayther.Models.DTOs.Request;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Rolayther.Models.DTOs.Request;
 using Rolayther.Services;
+using System.Security.Claims;
 
 namespace Rolayther.Controllers
 {
@@ -64,6 +65,28 @@ namespace Rolayther.Controllers
                 return NotFound(new { Message = "Player not found." });
 
             return Ok(player);
+        }
+
+        // Get current player's profile
+
+        [Authorize(Roles = "Player, Admin, Master")]
+        [HttpGet("Me")]
+        public async Task<IActionResult> Me()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrWhiteSpace(email))
+                return Unauthorized();
+
+            var player = await _playerService.GetPlayerByEmail(email);
+            if (player == null)
+                return NotFound(new { Message = "Player profile not found for this user." });
+
+            return Ok(new
+            {
+                player.PlayerId,
+                player.NickName,
+                player.Email
+            });
         }
 
         // Update player

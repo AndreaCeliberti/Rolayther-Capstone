@@ -18,29 +18,32 @@ namespace Rolayther.Controllers
                 _authService = authService;
             }
 
-            // ================== REGISTER ==================
-            [HttpPost("register")]
-            public async Task<IActionResult> Register([FromBody] RegisterUserDto registerDto)
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+        // ================== REGISTER ==================
+        [HttpPost("register-player")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterPlayer(PlayerRequestDto dto)
+        {
+            var result = await _authService.RegisterPlayerAsync(dto);
+            if (!result)
+                return BadRequest(new { Message = "Registrazione player fallita" });
 
-                try
-                {
-                    bool success = await _authService.RegisterUser(registerDto);
-                    if (success)
-                        return Ok(new { Message = "Utente registrato con successo" });
-                    else
-                        return BadRequest(new { Message = "Errore durante la registrazione" });
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, ex.Message);
-                }
-            }
+            return Ok(new { Message = "Player registrato con successo" });
+        }
 
-            // ================== LOGIN ==================
-            [HttpPost("login")]
+        [HttpPost("register-master")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterMaster(MasterRequestDto dto)
+        {
+            var result = await _authService.RegisterMasterAsync(dto);
+            if (!result)
+                return BadRequest(new { Message = "Registrazione master fallita" });
+
+            return Ok(new { Message = "Master registrato con successo" });
+        }
+
+
+        // ================== LOGIN ==================
+        [HttpPost("login")]
             public async Task<IActionResult> Login([FromBody] LoginUserDto loginDto)
             {
                 if (!ModelState.IsValid)
