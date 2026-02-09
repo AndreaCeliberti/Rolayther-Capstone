@@ -53,6 +53,22 @@ namespace Rolayther.Controllers
             }
         }
 
+        // Update a session
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("UpdateSession/{sessionId}")]
+        public async Task<IActionResult> UpdateSession(Guid sessionId, [FromBody] SessionRequestDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid session data.");
+
+            var ok = await _sessionService.UpdateSession(sessionId, dto);
+            if (!ok) return NotFound(new { Message = "Session not found or update failed." });
+
+            return Ok(new { Message = "Session updated successfully." });
+        }
+
+
         // Delete a session
 
         [Authorize(Roles = "Admin, Master")]

@@ -70,6 +70,15 @@ namespace Rolayther.Services
                 .FirstOrDefaultAsync(m => m.MasterId == masterId);
         }
 
+        // Get master by email
+
+        public async Task<Master?> GetMasterByEmail(string email)
+        {
+            return await _context.Masters
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Email == email);
+        }
+
         // Update Master
         public async Task<bool> UpdateMaster(Guid masterId, MasterRequestDto masterRequestDto)
         {

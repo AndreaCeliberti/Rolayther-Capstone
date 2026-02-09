@@ -59,6 +59,28 @@ namespace Rolayther.Services
             return await SaveAsync();
         }
 
+        // Update Session
+
+        public async Task<bool> UpdateSession(Guid sessionId, SessionRequestDto dto)
+        {
+            var session = await _context.Sessions.FirstOrDefaultAsync(s => s.SessionId == sessionId);
+            if (session == null) return false;
+
+            session.SessionTitle = dto.SessionTitle;
+            session.SessionDescription = dto.SessionDescription;
+            session.ScheduledAt = dto.ScheduledAt;
+            session.Duration = dto.Duration;
+            session.NumbOfPlayer = dto.NumbOfPlayer;
+            session.CoverImgUrl = dto.CoverImgUrl;
+            session.MasterId = dto.MasterId;
+            session.GameId = dto.GameId;
+            session.GenreId = dto.GenreId;
+
+            _context.Sessions.Update(session);
+            return await SaveAsync();
+        }
+
+
         //Soft delete
 
         public Task<bool> DeleteSession(Guid sessionId)

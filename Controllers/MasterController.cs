@@ -1,8 +1,9 @@
-﻿using Rolayther.Models.DTOs.Request;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Rolayther.Services;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Rolayther.Models.DTOs.Request;
+using Rolayther.Services;
+using System.Security.Claims;
 
 namespace Rolayther.Controllers
 {
@@ -51,6 +52,29 @@ namespace Rolayther.Controllers
             {
                 return BadRequest(new { Message = "Failed to create master." });
             }
+        }
+
+        // Get current masters's profile
+
+        
+        [Authorize(Roles = "Admin, Master")]
+        [HttpGet("Me")]
+        public async Task<IActionResult> Me()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrWhiteSpace(email))
+                return Unauthorized();
+
+            var master = await _masterService.GetMasterByEmail(email);
+            if (master == null)
+                return NotFound(new { Message = "Master profile not found for this user." });
+
+            return Ok(new
+            {
+                master.MasterId,
+                master.NickName,
+                master.Email
+            });
         }
 
         // Get master by id
