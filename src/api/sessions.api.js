@@ -6,6 +6,8 @@ export const SessionsApi = {
 
   create: (payload) => api.post("/Session/CreateSession", payload),
 
+  update: (sessionId, payload) => api.put(`/Session/UpdateSession/${sessionId}`, payload),
+
   delete: (sessionId) => api.delete(`/Session/DeleteSession/${sessionId}`),
 
   changeState: (sessionId, payload) =>

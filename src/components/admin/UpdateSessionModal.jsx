@@ -1,17 +1,17 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { Modal, Button, Form, Row, Col, Spinner } from "react-bootstrap";
-import { ToastContext } from "../../context/ToastContext";
-import { AuthContext } from "../../context/AuthContext";
+import { ToastContext } from "../../../context/ToastContext";
+import { AuthContext } from "../../../context/AuthContext";
 
-import { SessionsApi } from "../../api/sessions.api";
-import { GamesApi } from "../../api/games.api";
-import { GenresApi } from "../../api/genres.api";
-import { MastersApi } from "../../api/masters.api";
+import { SessionsApi } from "../../../api/sessions.api";
+import { GamesApi } from "../../../api/games.api";
+import { GenresApi } from "../../../api/genres.api";
+import { MastersApi } from "../../../api/masters.api";
 
-const initial = {
+const empty = {
   sessionTitle: "",
   sessionDescription: "",
-  scheduledAt: "",
+  scheduledAt: "", // datetime-local string
   duration: "",
   numbOfPlayer: 4,
   coverImgUrl: "",
@@ -20,11 +20,26 @@ const initial = {
   genreId: "",
 };
 
-export default function CreateSessionModal({ show, handleClose, onCreated }) {
+// ISO -> "YYYY-MM-DDTHH:mm" per datetime-local
+function isoToLocalInput(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  const pad = (n) => String(n).padStart(2, "0");
+  const yyyy = d.getFullYear();
+  const mm = pad(d.getMonth() + 1);
+  const dd = pad(d.getDate());
+  const hh = pad(d.getHours());
+  const mi = pad(d.getMinutes());
+  return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
+}
+
+export default function UpdateSessionModal({ show, handleClose, onUpdated, session }) {
   const { showToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
 
-  const [form, setForm] = useState(initial);
+  const isAdmin = user?.role === "Admin";
+
+  const [form, setForm] = useState(empty);
   const [validated, setValidated] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -32,60 +47,63 @@ export default function CreateSessionModal({ show, handleClose, onCreated }) {
   const [games, setGames] = useState([]);
   const [genres, setGenres] = useState([]);
   const [masters, setMasters] = useState([]);
-  const [meMaster, setMeMaster] = useState(null);
-
-  const isAdmin = user?.role === "Admin";
-  const isMaster = user?.role === "Master";
-  const canCreate = isAdmin || isMaster;
 
   const closeAndReset = () => {
-    setForm(initial);
     setValidated(false);
     setSaving(false);
-    setMeMaster(null);
+    setForm(empty);
     handleClose();
   };
 
+  // Pre-fill form quando apri modal e hai session
   useEffect(() => {
-    if (!show || !canCreate) return;
+    if (!show) return;
+    if (!session) return;
+
+    setForm({
+      sessionTitle: session.sessionTitle ?? "",
+      sessionDescription: session.sessionDescription ?? "",
+      scheduledAt: isoToLocalInput(session.scheduledAt),
+      duration: session.duration ?? "",
+      numbOfPlayer: session.numbOfPlayer ?? 4,
+      coverImgUrl: session.coverImgUrl ?? "",
+      masterId: session.masterId ?? "",
+      gameId: session.gameId ?? "",
+      genreId: session.genreId ?? "",
+    });
+  }, [show, session]);
+
+  // Load references (masters/games/genres)
+  useEffect(() => {
+    if (!show || !isAdmin) return;
 
     const loadRefs = async () => {
       setLoadingRefs(true);
       try {
-        // giochi + generi per tutti (admin/master)
-        const [gRes, geRes] = await Promise.all([
+        const [gRes, geRes, mRes] = await Promise.all([
           GamesApi.getAll(),
           GenresApi.getAll(),
+          MastersApi.getAll(),
         ]);
-
         setGames(gRes.data || []);
         setGenres(geRes.data || []);
-
-        // admin -> carica lista master
-        if (isAdmin) {
-          const mRes = await MastersApi.getAll();
-          setMasters(mRes.data || []);
-        }
-
-        // master -> ricava masterId automaticamente
-        if (isMaster) {
-          const meRes = await MastersApi.getMe();
-          setMeMaster(meRes.data);
-          setForm((f) => ({ ...f, masterId: meRes.data.masterId }));
-        }
-      } catch (err) {
-        showToast("Errore caricamento dati (giochi/generi/master)", "danger");
+        setMasters(mRes.data || []);
+      } catch {
+        showToast("Errore caricamento dati (giochi/generi/masters)", "danger");
       } finally {
         setLoadingRefs(false);
       }
     };
 
     loadRefs();
-  }, [show, canCreate, isAdmin, isMaster]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [show, isAdmin]);
 
   const canSubmit = useMemo(() => {
+    if (!isAdmin) return false;
+    if (!session?.sessionId) return false;
+
     return (
-      canCreate &&
       form.sessionTitle.trim() &&
       form.sessionDescription.trim() &&
       form.scheduledAt &&
@@ -95,7 +113,7 @@ export default function CreateSessionModal({ show, handleClose, onCreated }) {
       form.gameId &&
       form.genreId
     );
-  }, [form, canCreate]);
+  }, [form, isAdmin, session]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -113,6 +131,11 @@ export default function CreateSessionModal({ show, handleClose, onCreated }) {
     e.stopPropagation();
     setValidated(true);
 
+    if (!isAdmin) {
+      showToast("Accesso negato: solo Admin", "danger");
+      return;
+    }
+
     if (!canSubmit) {
       showToast("Compila tutti i campi obbligatori", "danger");
       return;
@@ -120,10 +143,13 @@ export default function CreateSessionModal({ show, handleClose, onCreated }) {
 
     setSaving(true);
     try {
+      // datetime-local -> ISO (evita problemi timezone)
+      const scheduledIso = new Date(form.scheduledAt).toISOString();
+
       const payload = {
         sessionTitle: form.sessionTitle.trim(),
         sessionDescription: form.sessionDescription.trim(),
-        scheduledAt: form.scheduledAt,
+        scheduledAt: scheduledIso,
         duration: form.duration.trim(),
         numbOfPlayer: Number(form.numbOfPlayer),
         coverImgUrl: form.coverImgUrl?.trim() ? form.coverImgUrl.trim() : null,
@@ -132,31 +158,29 @@ export default function CreateSessionModal({ show, handleClose, onCreated }) {
         genreId: form.genreId,
       };
 
-      await SessionsApi.create(payload);
+      await SessionsApi.update(session.sessionId, payload);
 
-      showToast("Sessione creata con successo ✅", "success");
+      showToast("Sessione aggiornata ✅", "success");
       closeAndReset();
-      onCreated?.();
+      onUpdated?.();
     } catch (err) {
       const msg =
         err?.response?.data?.message ||
         err?.response?.data?.Message ||
-        "Creazione sessione fallita. Controlla i dati.";
+        "Aggiornamento sessione fallito.";
       showToast(msg, "danger");
     } finally {
       setSaving(false);
     }
   };
 
-  if (!canCreate) {
+  if (!isAdmin) {
     return (
       <Modal show={show} onHide={closeAndReset} centered animation>
         <Modal.Header closeButton>
           <Modal.Title>Accesso negato</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="text-muted">
-          Solo Admin o Master possono creare sessioni.
-        </Modal.Body>
+        <Modal.Body className="text-muted">Solo gli Admin possono modificare sessioni.</Modal.Body>
       </Modal>
     );
   }
@@ -172,15 +196,13 @@ export default function CreateSessionModal({ show, handleClose, onCreated }) {
       contentClassName="border-0 shadow"
     >
       <Modal.Header closeButton className="border-0 pb-0">
-        <Modal.Title className="fw-semibold">+ Crea Sessione</Modal.Title>
+        <Modal.Title className="fw-semibold">✏️ Modifica Sessione</Modal.Title>
       </Modal.Header>
 
       <Modal.Body className="pt-2">
-        <p className="text-muted small mb-3">
-          Inserisci i dettagli principali e seleziona gioco e genere.
-        </p>
-
-        {loadingRefs ? (
+        {!session ? (
+          <div className="text-muted">Nessuna sessione selezionata.</div>
+        ) : loadingRefs ? (
           <div className="text-center py-5">
             <Spinner animation="border" />
             <div className="text-muted small mt-2">Caricamento dati…</div>
@@ -304,46 +326,24 @@ export default function CreateSessionModal({ show, handleClose, onCreated }) {
                 </Form.Group>
               </Col>
 
-              {/* ✅ MASTER ID: Admin sceglie, Master è automatico */}
-              {isAdmin && (
-                <Col xs={12} md={4}>
-                  <Form.Group>
-                    <Form.Label>Master *</Form.Label>
-                    <Form.Select
-                      name="masterId"
-                      value={form.masterId}
-                      onChange={onChange}
-                      required
-                    >
-                      <option value="">Seleziona master…</option>
-                      {masters.map((m) => (
-                        <option key={m.masterId} value={m.masterId}>
-                          {m.nickName || `${m.name} ${m.surname}`}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-              )}
-
-              {isMaster && (
-                <Col xs={12} md={4}>
-                  <Form.Group>
-                    <Form.Label>Master</Form.Label>
-                    <Form.Control
-                      value={
-                        meMaster
-                          ? `${meMaster.nickName} (${meMaster.email})`
-                          : "Caricamento…"
-                      }
-                      disabled
-                    />
-                    <Form.Text className="text-muted">
-                      MasterId impostato automaticamente.
-                    </Form.Text>
-                  </Form.Group>
-                </Col>
-              )}
+              <Col xs={12} md={4}>
+                <Form.Group>
+                  <Form.Label>Master *</Form.Label>
+                  <Form.Select
+                    name="masterId"
+                    value={form.masterId}
+                    onChange={onChange}
+                    required
+                  >
+                    <option value="">Seleziona master…</option>
+                    {masters.map((m) => (
+                      <option key={m.masterId} value={m.masterId}>
+                        {m.nickName || `${m.name} ${m.surname}`}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
             </Row>
 
             <div className="d-flex flex-column flex-sm-row gap-2 justify-content-end mt-4">
@@ -354,10 +354,10 @@ export default function CreateSessionModal({ show, handleClose, onCreated }) {
                 {saving ? (
                   <>
                     <Spinner size="sm" className="me-2" />
-                    Creazione…
+                    Salvataggio…
                   </>
                 ) : (
-                  "Crea Sessione"
+                  "Salva modifiche"
                 )}
               </Button>
             </div>

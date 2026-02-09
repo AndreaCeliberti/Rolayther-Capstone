@@ -20,6 +20,7 @@ import GenresList from "./pages/GenresList";
 import PlatformsList from "./pages/PlatformsList";
 import PlayerProfile from "./pages/PlayerProfile";
 import MasterProfile from "./pages/MasterProfile";
+import AdminDashboard from "./pages/AdminDashboard";
 
 
 export default function App() {
@@ -95,6 +96,13 @@ export default function App() {
             <Route path="/platforms" element={<PlatformsList />} />
             <Route path="/profile/player" element={<PlayerProfile />} />
             <Route path="/profile/master" element={<MasterProfile />} />
+            <Route
+                path="/admin"element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </ToastProvider>

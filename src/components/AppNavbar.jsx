@@ -46,7 +46,7 @@ export default function AppNavbar({
     <Navbar bg="dark" variant="dark" expand="lg" sticky="top" className="shadow-sm">
       <Container>
         <Navbar.Brand as={NavLink} to="/" className="fw-bold">
-          🎲 Rolayther
+           Rolayther
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="main-navbar" />
@@ -78,7 +78,7 @@ export default function AppNavbar({
 
           {/* RIGHT */}
           <Nav className="ms-auto align-items-lg-center gap-2">
-            {/* ✅ Button Create Session only Admin/Master */}
+            {/*  Button Create Session only Admin/Master */}
             {canCreateSession && (
               <Button
                 size="sm"
