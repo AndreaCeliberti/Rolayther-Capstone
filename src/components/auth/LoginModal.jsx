@@ -3,7 +3,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { ToastContext } from "../../context/ToastContext";
 
-export default function LoginModal({ show, handleClose, openRegister }) {
+export default function LoginModal({ show, handleClose, openRegisterPlayer, openRegisterMaster }) {
   const { login } = useContext(AuthContext);
   const { showToast } = useContext(ToastContext);
 
@@ -50,13 +50,17 @@ export default function LoginModal({ show, handleClose, openRegister }) {
         </Form>
 
         <div className="text-center">
-          <small>
-            Non hai un account?{" "}
-            <span className="text-primary" style={{ cursor: "pointer" }} onClick={openRegister}>
-              Registrati
-            </span>
-          </small>
-        </div>
+  <small>
+    Non hai un account?{" "}
+    <span className="text-primary" style={{ cursor: "pointer" }} onClick={openRegisterPlayer}>
+      Registrati Player
+    </span>
+    {" • "}
+    <span className="text-primary" style={{ cursor: "pointer" }} onClick={openRegisterMaster}>
+      Registrati Master
+    </span>
+  </small>
+</div>
       </Modal.Body>
     </Modal>
   );

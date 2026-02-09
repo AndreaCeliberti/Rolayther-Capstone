@@ -1,0 +1,19 @@
+import api from "./api";
+
+// Route backend: /api/Session/...
+export const SessionsApi = {
+  getAll: () => api.get("/Session/GetAllSessions"),
+
+  create: (payload) => api.post("/Session/CreateSession", payload),
+
+  delete: (sessionId) => api.delete(`/Session/DeleteSession/${sessionId}`),
+
+  changeState: (sessionId, payload) =>
+    api.post(`/Session/${sessionId}/ChangeState`, payload),
+
+  join: (sessionId, playerId) =>
+    api.post(`/Session/${sessionId}/Join/${playerId}`),
+
+  leave: (sessionId, playerId) =>
+    api.post(`/Session/${sessionId}/Leave/${playerId}`),
+};
