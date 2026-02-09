@@ -24,10 +24,12 @@ import { GamesApi } from "../api/games.api";
 import { GenresApi } from "../api/genres.api";
 import { PlatformsApi } from "../api/platforms.api";
 
-import CreateGameModal from "../components/admin/modals/CreateGameModal";
-import CreateGenreModal from "../components/admin/modals/CreateGenreModal";
-import CreatePlatformModal from "../components/admin/modals/CreatePlatformModal";
-import UpdateSessionModal from "../components/admin/modals/UpdateSessionModal";
+import CreateGameModal from "../components/admin/CreateGameModal";
+import CreateGenreModal from "../components/admin/CreateGenreModal";
+import CreatePlatformModal from "../components/admin/CreatePlatformModal";
+import UpdateSessionModal from "../components/admin/UpdateSessionModal";
+import UpdatePlayerModal from "../components/admin/UpdatePlayerModal";
+import UpdateMasterModal from "../components/admin/UpdateMasterModal";
 
 export default function AdminDashboard() {
   const { user } = useContext(AuthContext);
@@ -50,6 +52,10 @@ export default function AdminDashboard() {
   // modali update
   const [showUpdateSession, setShowUpdateSession] = useState(false);
   const [selectedSession, setSelectedSession] = useState(null);
+  const [showUpdatePlayer, setShowUpdatePlayer] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [showUpdateMaster, setShowUpdateMaster] = useState(false);
+  const [selectedMaster, setSelectedMaster] = useState(null);
 
   // state dati
   const [loading, setLoading] = useState({
@@ -184,7 +190,7 @@ export default function AdminDashboard() {
     const ok = await confirmAndRun(
       "Vuoi davvero eliminare questa sessione?",
       () => SessionsApi.delete(id),
-      "Sessione eliminata ✅"
+      "Sessione eliminata "
     );
     if (ok) loadSessions();
   };
@@ -193,7 +199,7 @@ export default function AdminDashboard() {
     const ok = await confirmAndRun(
       "Vuoi davvero eliminare questo player?",
       () => PlayersApi.delete(id),
-      "Player eliminato ✅"
+      "Player eliminato "
     );
     if (ok) loadPlayers();
   };
@@ -202,7 +208,7 @@ export default function AdminDashboard() {
     const ok = await confirmAndRun(
       "Vuoi davvero eliminare questo master?",
       () => MastersApi.delete(id),
-      "Master eliminato ✅"
+      "Master eliminato "
     );
     if (ok) loadMasters();
   };
@@ -211,7 +217,7 @@ export default function AdminDashboard() {
     const ok = await confirmAndRun(
       "Vuoi davvero eliminare questo gioco?",
       () => GamesApi.delete(id),
-      "Gioco eliminato ✅"
+      "Gioco eliminato "
     );
     if (ok) loadGames();
   };
@@ -220,7 +226,7 @@ export default function AdminDashboard() {
     const ok = await confirmAndRun(
       "Vuoi davvero eliminare questo genere?",
       () => GenresApi.delete(id),
-      "Genere eliminato ✅"
+      "Genere eliminato "
     );
     if (ok) loadGenres();
   };
@@ -229,7 +235,7 @@ export default function AdminDashboard() {
     const ok = await confirmAndRun(
       "Vuoi davvero eliminare questa piattaforma?",
       () => PlatformsApi.delete(id),
-      "Piattaforma eliminata ✅"
+      "Piattaforma eliminata "
     );
     if (ok) loadPlatforms();
   };
@@ -434,17 +440,16 @@ export default function AdminDashboard() {
                             <td className="text-end">
                               <div className="d-inline-flex gap-2">
                                 <Button
-                                  size="sm"
-                                  variant="outline-primary"
-                                  onClick={() =>
-                                    showToast(
-                                      "UpdatePlayerModal: lo creiamo nel prossimo step 😉",
-                                      "info"
-                                    )
-                                  }
+                                    size="sm"
+                                    variant="outline-primary"
+                                    onClick={() => {
+                                    setSelectedPlayer(p);
+                                    setShowUpdatePlayer(true);
+                                    }}
                                 >
                                   Modifica
                                 </Button>
+
                                 <Button
                                   size="sm"
                                   variant="outline-danger"
@@ -520,14 +525,12 @@ export default function AdminDashboard() {
                             <td className="text-end">
                               <div className="d-inline-flex gap-2">
                                 <Button
-                                  size="sm"
-                                  variant="outline-primary"
-                                  onClick={() =>
-                                    showToast(
-                                      "UpdateMasterModal: lo creiamo nel prossimo step 😉",
-                                      "info"
-                                    )
-                                  }
+                                    size="sm"
+                                    variant="outline-primary"
+                                    onClick={() => {
+                                     setSelectedMaster(m);
+                                     setShowUpdateMaster(true);
+                                      }}
                                 >
                                   Modifica
                                 </Button>
@@ -751,6 +754,24 @@ export default function AdminDashboard() {
             }}
             session={selectedSession}
             onUpdated={loadSessions}
+        />
+        <UpdatePlayerModal
+          show={showUpdatePlayer}
+          handleClose={() => {
+            setShowUpdatePlayer(false);
+            setSelectedPlayer(null);
+            }}
+          player={selectedPlayer}
+          onUpdated={loadPlayers}
+        />
+        <UpdateMasterModal
+            show={showUpdateMaster}
+            handleClose={() => {
+                setShowUpdateMaster(false);
+                setSelectedMaster(null);
+            }}
+            master={selectedMaster}
+            onUpdated={loadMasters}
         />
       </Container>
     </>
