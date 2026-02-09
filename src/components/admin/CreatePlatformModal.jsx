@@ -1,8 +1,8 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { Modal, Button, Form, Spinner } from "react-bootstrap";
-import { ToastContext } from "../../../context/ToastContext";
-import { AuthContext } from "../../../context/AuthContext";
-import { PlatformsApi } from "../../../api/platforms.api";
+import { ToastContext } from "../../context/ToastContext";
+import { AuthContext } from "../../context/AuthContext";
+import { PlatformsApi } from "../../api/platforms.api";
 
 const initial = {
   name: "",

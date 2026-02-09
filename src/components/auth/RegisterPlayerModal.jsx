@@ -1,6 +1,6 @@
 import { useContext, useMemo, useState } from "react";
 import { Modal, Button, Form, Row, Col, Spinner } from "react-bootstrap";
-import api from "../../api/api";
+import api from "../../api/axios";
 import { ToastContext } from "../../context/ToastContext";
 
 const initialState = {

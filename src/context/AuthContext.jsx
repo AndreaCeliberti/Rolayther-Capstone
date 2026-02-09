@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import api from "../api/api";
-import { PlayerApi } from "../api/player.api";
+import api from "../api/axios";
+import { PlayersApi } from "../api/players.api";
 
 export const AuthContext = createContext();
 
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     // se è Player recupera playerId via /Player/Me
     let playerId = null;
     if (data.role === "Player") {
-      const me = await PlayerApi.me();
+      const me = await PlayersApi.me();
       playerId = me.data.playerId;
       localStorage.setItem("playerId", playerId);
     } else {

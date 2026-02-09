@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "./axios";
 
 // Route backend: /api/Session/...
 export const SessionsApi = {

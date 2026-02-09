@@ -1,8 +1,8 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { Modal, Button, Form, Row, Col, Spinner } from "react-bootstrap";
-import { ToastContext } from "../../../context/ToastContext";
-import { AuthContext } from "../../../context/AuthContext";
-import { PlayersApi } from "../../../api/players.api";
+import { ToastContext } from "../../context/ToastContext";
+import { AuthContext } from "../../context/AuthContext";
+import { PlayersApi } from "../../api/players.api";
 
 const empty = {
   name: "",

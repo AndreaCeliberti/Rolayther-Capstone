@@ -5,7 +5,7 @@ import { useState } from "react";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastProvider } from "./context/ToastContext";
 
-import MainNavbar from "./components/AppNavbar";
+import AppNavbar from "./components/AppNavbar";
 
 import LoginModal from "./components/auth/LoginModal";
 import RegisterPlayerModal from "./components/auth/RegisterPlayerModal";
@@ -13,14 +13,16 @@ import RegisterMasterModal from "./components/auth/RegisterMasterModal";
 
 import Home from "./pages/Home";
 import SessionDetails from "./pages/SessionDetails";
-import SessionsList from "./pages/SessionsList";
-import MastersList from "./pages/MastersList";
-import GamesList from "./pages/GamesList";
-import GenresList from "./pages/GenresList";
-import PlatformsList from "./pages/PlatformsList";
+import Sessions from "./pages/Sessions";
+import Masters from "./pages/Masters";
+import Games from "./pages/Games";
+import Genres from "./pages/Genres";
+import Platforms from "./pages/Platforms";
 import PlayerProfile from "./pages/PlayerProfile";
 import MasterProfile from "./pages/MasterProfile";
 import AdminDashboard from "./pages/AdminDashboard";
+import CreateSessionModal from "./components/admin/CreateSessionModal";
+import AdminRoute from "./components/admin/AdminRoute";
 
 
 export default function App() {
@@ -89,11 +91,11 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/sessions/:id" element={<SessionDetails />} />
-            <Route path="/sessions" element={<SessionsList />} />
-            <Route path="/masters" element={<MastersList />} />
-            <Route path="/games" element={<GamesList />} />
-            <Route path="/genres" element={<GenresList />} />
-            <Route path="/platforms" element={<PlatformsList />} />
+            <Route path="/sessions" element={<Sessions />} />
+            <Route path="/masters" element={<Masters />} />
+            <Route path="/games" element={<Games />} />
+            <Route path="/genres" element={<Genres />} />
+            <Route path="/platforms" element={<Platforms />} />
             <Route path="/profile/player" element={<PlayerProfile />} />
             <Route path="/profile/master" element={<MasterProfile />} />
             <Route

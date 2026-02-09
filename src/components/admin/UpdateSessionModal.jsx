@@ -1,12 +1,12 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { Modal, Button, Form, Row, Col, Spinner } from "react-bootstrap";
-import { ToastContext } from "../../../context/ToastContext";
-import { AuthContext } from "../../../context/AuthContext";
+import { ToastContext } from "../../context/ToastContext";
+import { AuthContext } from "../../context/AuthContext";
 
-import { SessionsApi } from "../../../api/sessions.api";
-import { GamesApi } from "../../../api/games.api";
-import { GenresApi } from "../../../api/genres.api";
-import { MastersApi } from "../../../api/masters.api";
+import { SessionsApi } from "../../api/sessions.api";
+import { GamesApi } from "../../api/games.api";
+import { GenresApi } from "../../api/genres.api";
+import { MastersApi } from "../../api/masters.api";
 
 const empty = {
   sessionTitle: "",

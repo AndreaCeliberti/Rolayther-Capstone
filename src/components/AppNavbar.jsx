@@ -8,7 +8,7 @@ import {
   Badge,
 } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 
 function roleBadgeVariant(role) {
   if (role === "Admin") return "warning";

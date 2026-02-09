@@ -1,10 +1,10 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import { SessionsApi } from "../api/sessions.api";
-import SessionCard from "../components/sessions/SessionCard";
+import SessionCard from "../components/cards/SessionCard";
 import { AuthContext } from "../context/AuthContext";
 import { ToastContext } from "../context/ToastContext";
-import CreateSessionModal from "../components/sessions/CreateSessionModal";
+import CreateSessionModal from "../components/admin/CreateSessionModal";
 
 export default function Home() {
   const { user } = useContext(AuthContext);
