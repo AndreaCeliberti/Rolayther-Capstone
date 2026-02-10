@@ -234,6 +234,36 @@ namespace Rolayther.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Rolayther.Models.Entities.Bridges.MasterGame", b =>
+                {
+                    b.Property<Guid>("MasterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("MasterId", "GameId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("MasterGames");
+                });
+
+            modelBuilder.Entity("Rolayther.Models.Entities.Bridges.MasterPlatform", b =>
+                {
+                    b.Property<Guid>("MasterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PlatformId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("MasterId", "PlatformId");
+
+                    b.HasIndex("PlatformId");
+
+                    b.ToTable("MasterPlatforms");
+                });
+
             modelBuilder.Entity("Rolayther.Models.Entities.Game", b =>
                 {
                     b.Property<Guid>("GameId")
@@ -251,17 +281,12 @@ namespace Rolayther.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("MasterId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("GameId");
-
-                    b.HasIndex("MasterId");
 
                     b.ToTable("Games");
                 });
@@ -361,17 +386,12 @@ namespace Rolayther.Migrations
                     b.Property<string>("LogoUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("MasterId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("PlatformId");
-
-                    b.HasIndex("MasterId");
 
                     b.ToTable("Platforms");
                 });
@@ -612,15 +632,42 @@ namespace Rolayther.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Rolayther.Models.Entities.Game", b =>
+            modelBuilder.Entity("Rolayther.Models.Entities.Bridges.MasterGame", b =>
+                {
+                    b.HasOne("Rolayther.Models.Entities.Game", "Game")
+                        .WithMany("MasterGames")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Rolayther.Models.Entities.Master", "Master")
+                        .WithMany("MasterGames")
+                        .HasForeignKey("MasterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("Master");
+                });
+
+            modelBuilder.Entity("Rolayther.Models.Entities.Bridges.MasterPlatform", b =>
                 {
                     b.HasOne("Rolayther.Models.Entities.Master", "Master")
-                        .WithMany("Games")
+                        .WithMany("MasterPlatforms")
                         .HasForeignKey("MasterId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Rolayther.Models.Entities.Platform", "Platform")
+                        .WithMany("MasterPlatforms")
+                        .HasForeignKey("PlatformId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Master");
+
+                    b.Navigation("Platform");
                 });
 
             modelBuilder.Entity("Rolayther.Models.Entities.Genre", b =>
@@ -632,17 +679,6 @@ namespace Rolayther.Migrations
                         .IsRequired();
 
                     b.Navigation("Game");
-                });
-
-            modelBuilder.Entity("Rolayther.Models.Entities.Platform", b =>
-                {
-                    b.HasOne("Rolayther.Models.Entities.Master", "Master")
-                        .WithMany("Platform")
-                        .HasForeignKey("MasterId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Master");
                 });
 
             modelBuilder.Entity("Rolayther.Models.Entities.RefreshToken", b =>
@@ -712,15 +748,22 @@ namespace Rolayther.Migrations
             modelBuilder.Entity("Rolayther.Models.Entities.Game", b =>
                 {
                     b.Navigation("Genres");
+
+                    b.Navigation("MasterGames");
                 });
 
             modelBuilder.Entity("Rolayther.Models.Entities.Master", b =>
                 {
-                    b.Navigation("Games");
+                    b.Navigation("MasterGames");
 
-                    b.Navigation("Platform");
+                    b.Navigation("MasterPlatforms");
 
                     b.Navigation("Sessions");
+                });
+
+            modelBuilder.Entity("Rolayther.Models.Entities.Platform", b =>
+                {
+                    b.Navigation("MasterPlatforms");
                 });
 
             modelBuilder.Entity("Session", b =>

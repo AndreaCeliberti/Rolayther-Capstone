@@ -8,6 +8,6 @@ namespace Rolayther.Models.DTOs.Request
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
         public string? LogoUrl { get; set; }
-        public Guid MasterId { get; set; }
+        //public Guid MasterId { get; set; }
 }
 }

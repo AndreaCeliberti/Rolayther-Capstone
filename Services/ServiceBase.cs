@@ -22,7 +22,10 @@ namespace Rolayther.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("SAVE ERROR: " + ex.Message);
+                Console.WriteLine(ex.InnerException?.Message);
+                Console.WriteLine(ex.StackTrace);
+                throw;
             }
 
             return result;

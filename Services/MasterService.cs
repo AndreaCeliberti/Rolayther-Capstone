@@ -2,6 +2,7 @@
 using Rolayther.Data;
 using Rolayther.Models.DTOs.Request;
 using Rolayther.Models.Entities;
+using Rolayther.Models.Entities.Bridges;
 
 namespace Rolayther.Services
 {
@@ -15,9 +16,6 @@ namespace Rolayther.Services
             return await _context.Masters
                 .AsNoTracking()
                 .Include(m => m.Sessions)
-                .Include(m => m.Games)
-                //.Include(m => m.Genres)
-                .Include(m => m.Platform)
                 .Select(m => new Master
                 {
                     MasterId = m.MasterId,
@@ -28,9 +26,6 @@ namespace Rolayther.Services
                     BioMaster = m.BioMaster,
                     CreatedAt = m.CreatedAt,
                     Sessions = m.Sessions,
-                    Games = m.Games,
-                    //Genres = m.Genres,
-                    Platform = m.Platform
                 })
                 .ToListAsync();
         }
@@ -50,10 +45,10 @@ namespace Rolayther.Services
                 Email = masterRequestDto.Email,
                 BioMaster = masterRequestDto.BioMaster,
                 CreatedAt = DateTime.UtcNow,
-                Games = new List<Game>(),
+                MasterGames = new List<MasterGame>(),
                 Sessions = new List<Session>(),
                 //Genres = new List<Genre>(),
-                Platform = new List<Platform>()
+                MasterPlatforms = new List<MasterPlatform>()
             };
             _context.Masters.Add(newMaster);
             return await SaveAsync();
@@ -65,8 +60,6 @@ namespace Rolayther.Services
             return await _context.Masters
                 .AsNoTracking()
                 .Include(m => m.Sessions)
-                .Include(m => m.Games)
-                .Include(m => m.Platform)
                 .FirstOrDefaultAsync(m => m.MasterId == masterId);
         }
 
@@ -84,8 +77,6 @@ namespace Rolayther.Services
         {
             var master = await _context.Masters
                 .Include(m => m.Sessions)
-                .Include(m => m.Games)
-                .Include(m => m.Platform)
                 .FirstOrDefaultAsync(m => m.MasterId == masterId);
 
             if (master == null)

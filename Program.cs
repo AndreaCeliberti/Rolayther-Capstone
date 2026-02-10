@@ -104,6 +104,8 @@ builder.Services.AddScoped<GenreService>();
 builder.Services.AddScoped<PlatformService>();
 builder.Services.AddScoped<PlayerService>();
 builder.Services.AddScoped<SessionService>();
+builder.Services.AddScoped<MasterGamesService>();
+builder.Services.AddScoped<MasterPlatformsService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

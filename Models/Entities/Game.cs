@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Rolayther.Models.Entities.Bridges;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations;
 
 namespace Rolayther.Models.Entities
@@ -18,10 +19,10 @@ namespace Rolayther.Models.Entities
 
         public string? CoverImageUrl { get; set; }
 
-        // FK esplicita verso Master per evitare shadow FK e percorsi cascade impliciti
-        public Guid MasterId { get; set; }
-        public Master? Master { get; set; }
 
         public ICollection<Genre> Genres { get; set; } = new List<Genre>();
+
+        public ICollection<MasterGame> MasterGames { get; set; } = new List<MasterGame>();
+
     }
 }

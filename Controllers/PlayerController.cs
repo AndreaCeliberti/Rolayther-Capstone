@@ -36,20 +36,27 @@ namespace Rolayther.Controllers
 
         [AllowAnonymous]
         [HttpPost("CreatePlayer")]
-        public async Task<IActionResult> CreatePlayer(PlayerRequestDto playerRequestDto)
+        public async Task<IActionResult> CreatePlayer([FromBody]PlayerRequestDto playerRequestDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid player data.");
+                return ValidationProblem(ModelState);
             }
-            var isCreated = await _playerService.CreatePlayer(playerRequestDto);
-            if (isCreated)
+
+            try
             {
-                return Ok(new { Message = "Player created Successfully." });
+                var isCreated = await _playerService.CreatePlayer(playerRequestDto);
+
+                return isCreated
+                    ? Ok(new { Message = "Player created Successfully." })
+                    : BadRequest(new { Message = "Failed to create Player." });
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(new { Message = "Failed to create player." });
+                Console.WriteLine($"[CreatePlayer] ERROR: {ex}");
+
+                return BadRequest(new { message = "Registrazione master fallita", detail = ex.Message });
+
             }
         }
 

@@ -5,7 +5,7 @@
 namespace Rolayther.Migrations
 {
     /// <inheritdoc />
-    public partial class registerchanged : Migration
+    public partial class fix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

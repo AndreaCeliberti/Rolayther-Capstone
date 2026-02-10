@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Rolayther.Models.Entities.Bridges;
 using System.ComponentModel.DataAnnotations;
 
 namespace Rolayther.Models.Entities
@@ -26,8 +27,11 @@ namespace Rolayther.Models.Entities
         public string? BioMaster { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public ICollection<Game> Games { get; set; }
         public ICollection<Session> Sessions { get; set; }
-        public ICollection<Platform> Platform { get; set; }
+
+        public ICollection<MasterGame> MasterGames { get; set; } = new List<MasterGame>();
+        public ICollection<MasterPlatform> MasterPlatforms { get; set; } = new List<MasterPlatform>();
+
+
     }
 }

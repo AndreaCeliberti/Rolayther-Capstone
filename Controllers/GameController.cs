@@ -37,9 +37,9 @@ namespace Rolayther.Controllers
         // Create a new game
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("createGame")]
+        [HttpPost("CreateGame")]
         
-        public async Task<IActionResult> CreateGame( GameRequestDto gameRequestDto)
+        public async Task<IActionResult> CreateGame( [FromBody]GameRequestDto gameRequestDto)
         {
             if (!ModelState.IsValid)
             {

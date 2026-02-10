@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Rolayther.Models.Entities.Bridges;
 using System.ComponentModel.DataAnnotations;
 namespace Rolayther.Models.Entities
 {
@@ -12,7 +13,6 @@ namespace Rolayther.Models.Entities
         [MaxLength(1000)]
         public string? Description { get; set; }
         public string? LogoUrl { get; set; }
-        public Guid MasterId { get; set; }
-        public Master? Master { get; set; }
+        public ICollection<MasterPlatform> MasterPlatforms { get; set; }
     }
 }

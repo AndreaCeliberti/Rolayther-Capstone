@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Rolayther.Migrations
 {
     /// <inheritdoc />
-    public partial class mig1 : Migration
+    public partial class manytomany : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,6 +55,21 @@ namespace Rolayther.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Games",
+                columns: table => new
+                {
+                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    CoverImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Games", x => x.GameId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Masters",
                 columns: table => new
                 {
@@ -72,6 +87,21 @@ namespace Rolayther.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Masters", x => x.MasterId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Platforms",
+                columns: table => new
+                {
+                    PlatformId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    LogoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Platforms", x => x.PlatformId);
                 });
 
             migrationBuilder.CreateTable(
@@ -224,48 +254,6 @@ namespace Rolayther.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Games",
-                columns: table => new
-                {
-                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    CoverImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MasterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Games", x => x.GameId);
-                    table.ForeignKey(
-                        name: "FK_Games_Masters_MasterId",
-                        column: x => x.MasterId,
-                        principalTable: "Masters",
-                        principalColumn: "MasterId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Platforms",
-                columns: table => new
-                {
-                    PlatformId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    LogoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MasterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Platforms", x => x.PlatformId);
-                    table.ForeignKey(
-                        name: "FK_Platforms_Masters_MasterId",
-                        column: x => x.MasterId,
-                        principalTable: "Masters",
-                        principalColumn: "MasterId");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Genres",
                 columns: table => new
                 {
@@ -284,6 +272,54 @@ namespace Rolayther.Migrations
                         column: x => x.GameId,
                         principalTable: "Games",
                         principalColumn: "GameId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MasterGames",
+                columns: table => new
+                {
+                    MasterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MasterGames", x => new { x.MasterId, x.GameId });
+                    table.ForeignKey(
+                        name: "FK_MasterGames_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "GameId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MasterGames_Masters_MasterId",
+                        column: x => x.MasterId,
+                        principalTable: "Masters",
+                        principalColumn: "MasterId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MasterPlatforms",
+                columns: table => new
+                {
+                    MasterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PlatformId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MasterPlatforms", x => new { x.MasterId, x.PlatformId });
+                    table.ForeignKey(
+                        name: "FK_MasterPlatforms_Masters_MasterId",
+                        column: x => x.MasterId,
+                        principalTable: "Masters",
+                        principalColumn: "MasterId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MasterPlatforms_Platforms_PlatformId",
+                        column: x => x.PlatformId,
+                        principalTable: "Platforms",
+                        principalColumn: "PlatformId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -409,19 +445,19 @@ namespace Rolayther.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_MasterId",
-                table: "Games",
-                column: "MasterId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Genres_GameId",
                 table: "Genres",
                 column: "GameId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Platforms_MasterId",
-                table: "Platforms",
-                column: "MasterId");
+                name: "IX_MasterGames_GameId",
+                table: "MasterGames",
+                column: "GameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MasterPlatforms_PlatformId",
+                table: "MasterPlatforms",
+                column: "PlatformId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserId",
@@ -473,7 +509,10 @@ namespace Rolayther.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Platforms");
+                name: "MasterGames");
+
+            migrationBuilder.DropTable(
+                name: "MasterPlatforms");
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");
@@ -488,6 +527,9 @@ namespace Rolayther.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Platforms");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
@@ -500,10 +542,10 @@ namespace Rolayther.Migrations
                 name: "Genres");
 
             migrationBuilder.DropTable(
-                name: "Games");
+                name: "Masters");
 
             migrationBuilder.DropTable(
-                name: "Masters");
+                name: "Games");
         }
     }
 }

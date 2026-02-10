@@ -19,27 +19,63 @@ namespace Rolayther.Controllers
             }
 
         // ================== REGISTER ==================
-        [HttpPost("register-player")]
-        [AllowAnonymous]
-        public async Task<IActionResult> RegisterPlayer(PlayerRequestDto dto)
-        {
-            var result = await _authService.RegisterPlayerAsync(dto);
-            if (!result)
-                return BadRequest(new { Message = "Registrazione player fallita" });
 
-            return Ok(new { Message = "Player registrato con successo" });
+        [HttpPost("register-player")]
+        public async Task<IActionResult> RegisterPlayer([FromBody] PlayerRequestDto playerRequestDto)
+        {
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
+
+            try
+            {
+                var result = await _authService.RegisterPlayerAsync(playerRequestDto);
+
+                if (!result)
+                    return BadRequest(new { Message = "Registrazione player fallita" });
+
+                return Ok(new { Message = "Player registrato con successo" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[RegisterPlayer] Payload: {System.Text.Json.JsonSerializer.Serialize(playerRequestDto)}");
+                Console.WriteLine($"[RegisterPlayer] ERROR: {ex}");
+
+                return BadRequest(new
+                {
+                    Message = "Registrazione player fallita",
+                    Detail = ex.Message
+                });
+            }
         }
 
         [HttpPost("register-master")]
-        [AllowAnonymous]
-        public async Task<IActionResult> RegisterMaster(MasterRequestDto dto)
+        public async Task<IActionResult> RegisterMaster([FromBody] MasterRequestDto masterRequestDto)
         {
-            var result = await _authService.RegisterMasterAsync(dto);
-            if (!result)
-                return BadRequest(new { Message = "Registrazione master fallita" });
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
 
-            return Ok(new { Message = "Master registrato con successo" });
+            try
+            {
+                var result = await _authService.RegisterMasterAsync(masterRequestDto);
+
+                if (!result)
+                    return BadRequest(new { Message = "Registrazione master fallita" });
+
+                return Ok(new { Message = "Master registrato con successo" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[RegisterMaster] Payload: {System.Text.Json.JsonSerializer.Serialize(masterRequestDto)}");
+                Console.WriteLine($"[RegisterMaster] ERROR: {ex}");
+
+                return BadRequest(new
+                {
+                    Message = "Registrazione master fallita",
+                    Detail = ex.Message
+                });
+            }
         }
+
 
 
         // ================== LOGIN ==================

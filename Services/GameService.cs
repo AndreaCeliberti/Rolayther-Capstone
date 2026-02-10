@@ -35,7 +35,8 @@ namespace Rolayther.Services
                 Title = gameRequestDto.Title,
                 Description = gameRequestDto.Description,
                 CoverImageUrl = gameRequestDto.CoverImageUrl,
-                Genres = new List<Genre>()
+                Genres = new List<Genre>(),
+                IsDeleted = false
             };
             _context.Games.Add(newGame);
 

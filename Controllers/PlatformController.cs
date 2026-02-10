@@ -18,7 +18,7 @@ namespace Rolayther.Controllers
 
         // Get all platforms 
 
-        [Authorize]
+        
         [AllowAnonymous]
         [HttpGet("GetAllPlatforms")]
         public async Task<IActionResult> GetAllPlatforms()

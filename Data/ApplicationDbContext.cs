@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Rolayther.Models.Entities;
+using Rolayther.Models.Entities.Bridges;
 
 namespace Rolayther.Data
 {
@@ -17,6 +18,9 @@ namespace Rolayther.Data
         public DbSet<Master> Masters { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<SessionStateHistory> SessionStateHistories { get; set; }
+        public DbSet<MasterGame> MasterGames { get; set; }
+        public DbSet<MasterPlatform> MasterPlatforms { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -67,18 +71,18 @@ namespace Rolayther.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             // Relazione Game -> Master (esplicita, usando la FK nel model Game)
-            modelBuilder.Entity<Game>()
-                .HasOne(g => g.Master)
-                .WithMany(m => m.Games)
-                .HasForeignKey(g => g.MasterId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<Game>()
+                //HasOne(g => g.Master)
+                //.WithMany(m => m.Games)
+                //.HasForeignKey(g => g.MasterId)
+                //.OnDelete(DeleteBehavior.NoAction);
 
             // Relazione Platform -> Master
-            modelBuilder.Entity<Platform>()
-                .HasOne(p => p.Master)
-                .WithMany(m => m.Platform)
-                .HasForeignKey(p => p.MasterId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<Platform>()
+                //.HasOne(p => p.Master)
+                //.WithMany(m => m.Platform)
+                //.HasForeignKey(p => p.MasterId)
+                //.OnDelete(DeleteBehavior.NoAction);
 
             // Relazione many-to-many Session <-> Player: join table esplicita "SessionPlayer" con NO ACTION on delete
             modelBuilder.Entity<Session>()
@@ -96,6 +100,34 @@ namespace Rolayther.Data
                 .WithMany(s => s.StateHistory)
                 .HasForeignKey(h => h.SessionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Configurazione relazione many-to-many Master <-> Game tramite MasterGame
+            modelBuilder.Entity<MasterGame>()
+                .HasKey(mg => new { mg.MasterId, mg.GameId });
+
+            modelBuilder.Entity<MasterGame>()
+                .HasOne(mg => mg.Master)
+                .WithMany(m => m.MasterGames)
+                .HasForeignKey(mg => mg.MasterId);
+
+            modelBuilder.Entity<MasterGame>()
+                .HasOne(mg => mg.Game)
+                .WithMany(g => g.MasterGames)
+                .HasForeignKey(mg => mg.GameId);
+
+            // Configurazione relazione many-to-many Master <-> Platform tramite MasterPlatform
+            modelBuilder.Entity<MasterPlatform>()
+                .HasKey(mp => new { mp.MasterId, mp.PlatformId });
+
+            modelBuilder.Entity<MasterPlatform>()
+                .HasOne(mp => mp.Master)
+                .WithMany(m => m.MasterPlatforms)
+                .HasForeignKey(mp => mp.MasterId);
+
+            modelBuilder.Entity<MasterPlatform>()
+                .HasOne(mp => mp.Platform)
+                .WithMany(p => p.MasterPlatforms)
+                .HasForeignKey(mp => mp.PlatformId);
         }
     }
 }

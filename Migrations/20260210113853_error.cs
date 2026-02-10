@@ -5,7 +5,7 @@
 namespace Rolayther.Migrations
 {
     /// <inheritdoc />
-    public partial class gamecontrollerfixed : Migration
+    public partial class error : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

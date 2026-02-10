@@ -33,7 +33,7 @@ namespace Rolayther.Services
                 Name =  platformRequestDto.Name,
                 Description = platformRequestDto.Description,
                 LogoUrl = platformRequestDto.LogoUrl,
-                MasterId = platformRequestDto.MasterId
+                //MasterId = platformRequestDto.MasterId
             };
             _context.Platforms.Add(newPlatform);
             return await SaveAsync();

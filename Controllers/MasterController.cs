@@ -35,22 +35,28 @@ namespace Rolayther.Controllers
 
         // Create a new master
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpPost("CreateMaster")]
-        public async Task<IActionResult> CreateMaster(MasterRequestDto masterRequestDto)
+        public async Task<IActionResult> CreateMaster([FromBody]MasterRequestDto masterRequestDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid master data.");
+                return ValidationProblem(ModelState);
             }
-            var isCreated = await _masterService.CreateMaster(masterRequestDto);
-            if (isCreated)
+
+            try
             {
-                return Ok(new { Message = "Master created Successfully." });
+                var isCreated = await _masterService.CreateMaster(masterRequestDto);
+
+                return isCreated
+                    ? Ok(new { Message = "Master created Successfully." })
+                    : BadRequest(new { Message = "Failed to create master." });
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(new { Message = "Failed to create master." });
+                Console.WriteLine($"[CreateMaster] ERROR: {ex}");
+
+                return BadRequest(new { message = "Registrazione master fallita", detail = ex.Message });
             }
         }
 

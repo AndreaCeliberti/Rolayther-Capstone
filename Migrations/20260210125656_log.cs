@@ -5,7 +5,7 @@
 namespace Rolayther.Migrations
 {
     /// <inheritdoc />
-    public partial class update : Migration
+    public partial class log : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
