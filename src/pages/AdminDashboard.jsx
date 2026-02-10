@@ -43,8 +43,6 @@ export default function AdminDashboard() {
   const [showCreateGame, setShowCreateGame] = useState(false);
   const [showCreateGenre, setShowCreateGenre] = useState(false);
   const [showCreatePlatform, setShowCreatePlatform] = useState(false);
-
-  // TODO: quando li creiamo davvero
   const [showCreateSession, setShowCreateSession] = useState(false);
   const [showCreatePlayer, setShowCreatePlayer] = useState(false);
   const [showCreateMaster, setShowCreateMaster] = useState(false);
@@ -383,7 +381,7 @@ export default function AdminDashboard() {
                 {/* TODO: CreateSessionModal */}
                 {showCreateSession && (
                   <div className="text-muted small mt-3">
-                    ⚠️ CreateSessionModal non è ancora stato creato in questa fase.
+                    <Button onClick={() => setShowCreateSession(true)}>Crea</Button> 
                   </div>
                 )}
               </Tab>
@@ -468,7 +466,7 @@ export default function AdminDashboard() {
 
                 {showCreatePlayer && (
                   <div className="text-muted small mt-3">
-                    ⚠️ CreatePlayerModal non ancora creato (lo facciamo dopo).
+                    <Button onClick={() => setShowCreatePlayer(true)}>+ Crea</Button>
                   </div>
                 )}
               </Tab>
@@ -552,7 +550,7 @@ export default function AdminDashboard() {
 
                 {showCreateMaster && (
                   <div className="text-muted small mt-3">
-                    ⚠️ CreateMasterModal non ancora creato (lo facciamo dopo).
+                    <Button onClick={() => setShowCreateMaster(true)}>+ Crea</Button>
                   </div>
                 )}
               </Tab>
@@ -746,6 +744,16 @@ export default function AdminDashboard() {
           handleClose={() => setShowCreatePlatform(false)}
           onCreated={loadPlatforms}
         />
+        <CreatePlayerModal
+          show={showCreatePlayer}
+          handleClose={() => setShowCreatePlayer(false)}
+          onCreated={loadPlayers}
+        />
+        <CreateMasterModal
+          show={showCreateMaster}
+          handleClose={() => setShowCreateMaster(false)}
+          onCreated={loadMasters}
+        />        
         <UpdateSessionModal
             show={showUpdateSession}
             handleClose={() => {

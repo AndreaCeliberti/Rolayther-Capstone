@@ -133,22 +133,7 @@ export default function CreatePlatformModal({ show, handleClose, onCreated }) {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>MasterId *</Form.Label>
-              <Form.Control
-                name="masterId"
-                value={form.masterId}
-                onChange={onChange}
-                required
-                placeholder="Guid del master"
-              />
-              <Form.Text className="text-muted">
-                Se vuoi, lo trasformiamo in select caricando la lista Masters.
-              </Form.Text>
-              <Form.Control.Feedback type="invalid">
-                Inserisci un MasterId valido.
-              </Form.Control.Feedback>
-            </Form.Group>
+            
 
             <div className="d-flex justify-content-end gap-2">
               <Button variant="outline-secondary" onClick={closeAndReset}>
