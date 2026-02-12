@@ -33,13 +33,15 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("role", data.role);
 
     const decoded = jwtDecode(data.accessToken);
+    //console.log("DECODED TOKEN:", decoded);
 
     // se è Player recupera playerId via /Player/Me
     let playerId = null;
     if (data.role === "Player") {
-      const me = await PlayersApi.me();
+      const me = await PlayersApi.getMe();
       playerId = me.data.playerId;
       localStorage.setItem("playerId", playerId);
+      //console.log("ME DATA:", me.data);
     } else {
       localStorage.removeItem("playerId");
     }

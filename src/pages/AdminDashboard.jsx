@@ -27,6 +27,8 @@ import { PlatformsApi } from "../api/platforms.api";
 import CreateGameModal from "../components/admin/CreateGameModal";
 import CreateGenreModal from "../components/admin/CreateGenreModal";
 import CreatePlatformModal from "../components/admin/CreatePlatformModal";
+import CreateMasterModal from "../components/admin/CreateMasterModal";
+import CreatePlayerModal from "../components/admin/CreatePlayerModal";
 import UpdateSessionModal from "../components/admin/UpdateSessionModal";
 import UpdatePlayerModal from "../components/admin/UpdatePlayerModal";
 import UpdateMasterModal from "../components/admin/UpdateMasterModal";

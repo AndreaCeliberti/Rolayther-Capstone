@@ -12,6 +12,8 @@ const initial = {
   avatarImgUrl: "",
   email: "",
   bioMaster: "",
+  password: "",
+  confirmPassword: "",
 };
 
 export default function CreateMasterModal({ show, handleClose, onCreated }) {
@@ -30,6 +32,14 @@ export default function CreateMasterModal({ show, handleClose, onCreated }) {
     handleClose();
   };
 
+  const passwordsMatch = useMemo(() => {
+    return form.password === form.confirmPassword;
+  }, [form.password, form.confirmPassword]);
+
+  const passwordOk = useMemo(() => {
+    return (form.password?.trim() || "").length >= 6;
+  }, [form.password]);
+
   const canSubmit = useMemo(() => {
     return (
       isAdmin &&
@@ -37,9 +47,11 @@ export default function CreateMasterModal({ show, handleClose, onCreated }) {
       form.surname.trim() &&
       form.nickName.trim() &&
       form.dateOfBirth &&
-      form.email.trim()
+      form.email.trim() &&
+      passwordOk &&
+      passwordsMatch
     );
-  }, [form, isAdmin]);
+  }, [form, isAdmin, passwordOk, passwordsMatch]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -53,6 +65,16 @@ export default function CreateMasterModal({ show, handleClose, onCreated }) {
 
     if (!isAdmin) {
       showToast("Accesso negato: solo Admin", "danger");
+      return;
+    }
+
+    if (!passwordOk) {
+      showToast("La password deve contenere almeno 6 caratteri", "danger");
+      return;
+    }
+
+    if (!passwordsMatch) {
+      showToast("Le password non coincidono", "danger");
       return;
     }
 
@@ -71,6 +93,7 @@ export default function CreateMasterModal({ show, handleClose, onCreated }) {
         avatarImgUrl: form.avatarImgUrl?.trim() ? form.avatarImgUrl.trim() : null,
         email: form.email.trim(),
         bioMaster: form.bioMaster?.trim() ? form.bioMaster.trim() : null,
+        password: form.password, // <-- aggiunta
       };
 
       await MastersApi.create(payload);
@@ -161,6 +184,42 @@ export default function CreateMasterModal({ show, handleClose, onCreated }) {
                   onChange={onChange}
                   required
                 />
+              </Form.Group>
+            </Col>
+
+            {/* PASSWORD */}
+            <Col xs={12} md={6}>
+              <Form.Group>
+                <Form.Label>Password *</Form.Label>
+                <Form.Control
+                  type="password"
+                  name="password"
+                  value={form.password}
+                  onChange={onChange}
+                  required
+                  minLength={6}
+                  isInvalid={validated && !passwordOk}
+                />
+                <Form.Control.Feedback type="invalid">
+                  Minimo 6 caratteri.
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+
+            <Col xs={12} md={6}>
+              <Form.Group>
+                <Form.Label>Conferma password *</Form.Label>
+                <Form.Control
+                  type="password"
+                  name="confirmPassword"
+                  value={form.confirmPassword}
+                  onChange={onChange}
+                  required
+                  isInvalid={validated && !passwordsMatch}
+                />
+                <Form.Control.Feedback type="invalid">
+                  Le password non coincidono.
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
 

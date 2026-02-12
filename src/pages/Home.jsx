@@ -70,15 +70,7 @@ export default function Home() {
           </p>
         </div>
 
-        {canCreate && (
-          <Button
-            variant="primary"
-            className="align-self-center align-self-md-auto"
-            onClick={() => setShowCreate(true)}
-          >
-            ➕ Crea sessione
-          </Button>
-        )}
+        
       </div>
 
       {loading ? (

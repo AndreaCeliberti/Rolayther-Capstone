@@ -23,6 +23,7 @@ export default function SessionDetails() {
   const { id } = useParams(); // sessionId (Guid)
   const { showToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
+  console.log("USER CONTEXT:", user);
 
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
@@ -60,26 +61,13 @@ export default function SessionDetails() {
 
   // se sei Player loggato -> recupera PlayerId dal backend
   useEffect(() => {
-    const loadMe = async () => {
-      if (!isPlayer) {
-        setMePlayerId(null);
-        return;
-      }
+  if (!isPlayer) {
+    setMePlayerId(null);
+    return;
+  }
 
-      setMeLoading(true);
-      try {
-        const res = await PlayersApi.getMe();
-        setMePlayerId(res.data?.playerId || res.data?.PlayerId || null);
-      } catch {
-        // se fallisce, disabilitiamo join/leave
-        setMePlayerId(null);
-      } finally {
-        setMeLoading(false);
-      }
-    };
-
-    loadMe();
-  }, [isPlayer]);
+  setMePlayerId(user?.playerId || user?.PlayerId || null);
+}, [isPlayer, user]);
 
   const players = session?.players || session?.Players || [];
   const maxPlayers = session?.numbOfPlayer ?? session?.NumbOfPlayer ?? 0;
@@ -194,8 +182,11 @@ export default function SessionDetails() {
                         {session.genre?.name && (
                           <Badge bg="secondary"> {session.genre.name}</Badge>
                         )}
+                        {session.platform?.name && (
+                          <Badge bg="secondary">Osted on {session.platform.name}</Badge>
+                        )}
                         {session.master?.nickName && (
-                          <Badge bg="secondary"> {session.master.nickName}</Badge>
+                          <Badge bg="secondary">Mastered by {session.master.nickName}</Badge>
                         )}
                       </div>
                     </div>
