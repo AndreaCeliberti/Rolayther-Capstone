@@ -64,7 +64,7 @@ namespace Rolayther.Controllers
 
         
         [Authorize(Roles = "Admin, Master")]
-        [HttpGet("Me")]
+        [HttpGet("Me/{email}")]
         public async Task<IActionResult> Me()
         {
             var email = User.FindFirstValue(ClaimTypes.Email);

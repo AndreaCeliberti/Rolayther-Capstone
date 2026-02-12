@@ -64,11 +64,11 @@ namespace Rolayther.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             // Relazione Genre -> Game (esplicita per evitare comportamento di default a cascata)
-            modelBuilder.Entity<Genre>()
-                .HasOne(g => g.Game)
-                .WithMany(gm => gm.Genres)
-                .HasForeignKey(g => g.GameId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<Genre>()
+                //.HasOne(g => g.Game)
+                //.WithMany(gm => gm.Genres)
+                //.HasForeignKey(g => g.GameId)
+                //.OnDelete(DeleteBehavior.NoAction);
 
             // Relazione Game -> Master (esplicita, usando la FK nel model Game)
             //modelBuilder.Entity<Game>()

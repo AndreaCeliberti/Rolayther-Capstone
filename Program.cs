@@ -1,15 +1,16 @@
-using Rolayther.Data;
-using Rolayther.Exceptions;
-using Rolayther.Helpers;
-using Rolayther.Models.Entities;
-using Rolayther.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Rolayther.Data;
+using Rolayther.Exceptions;
+using Rolayther.Helpers;
+using Rolayther.Models.Entities;
+using Rolayther.Services;
 using Serilog;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +37,13 @@ Log.Information("Registering services...");
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(o =>
+    {
+        o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
 //Stringa di connessione al database, impostata nel file appsettings.json
 string connectionString = string.Empty;
@@ -167,7 +174,7 @@ if (app.Environment.IsDevelopment())
 
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseCors("AllowFrontend");
 

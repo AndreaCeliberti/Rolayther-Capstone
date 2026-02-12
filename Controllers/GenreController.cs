@@ -36,7 +36,7 @@ namespace Rolayther.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("CreateGenre")]
-        public async Task<IActionResult> CreateGenre(GenreRequestDto genreRequestDto)
+        public async Task<IActionResult> CreateGenre([FromBody]GenreRequestDto genreRequestDto)
         {
             if (!ModelState.IsValid)
             {

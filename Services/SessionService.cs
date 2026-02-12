@@ -37,6 +37,18 @@ namespace Rolayther.Services
                 .ToListAsync();
         }
 
+        // Get Session by Id
+        public async Task<Session?> GetSessionById(Guid sessionId)
+        {
+            return await _context.Sessions
+                .AsNoTracking()
+                .Include(s => s.Master)
+                .Include(s => s.Game)
+                .Include(s => s.Genre)
+                .Include(s => s.Players)
+                .FirstOrDefaultAsync(s => s.SessionId == sessionId);
+        }
+
         // Create Session
 
         public async Task<bool> CreateSession(SessionRequestDto sessionRequestDto)
@@ -123,8 +135,9 @@ namespace Rolayther.Services
             {
                 session.AddPlayer(player);
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine($"[AddPlayerToSession] {ex.GetType().Name}: {ex.Message}");
                 return false;
             }
 

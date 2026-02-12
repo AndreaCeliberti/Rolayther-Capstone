@@ -116,8 +116,8 @@ namespace Rolayther.Services
                 {
                     UserName = userDto.Email,
                     Email = userDto.Email,
-                    Name = userDto.FirsName,
-                    LastName = userDto.LastName,
+                    Name = userDto.Name,
+                    Surname = userDto.Surname,
                     CreatedAt = DateTime.UtcNow,
                     Id = Guid.NewGuid().ToString(),
                     IsDeleted = false,
@@ -156,7 +156,9 @@ namespace Rolayther.Services
                 var user = new ApplicationUser
                 {
                     UserName = dto.Email,
-                    Email = dto.Email
+                    Email = dto.Email,
+                    Name = dto.Name,
+                    Surname = dto.Surname
                 };
 
                 var result = await _userManager.CreateAsync(user, dto.Password);
@@ -201,7 +203,9 @@ namespace Rolayther.Services
                 var user = new ApplicationUser
                 {
                     UserName = dto.Email,
-                    Email = dto.Email
+                    Email = dto.Email,
+                    Name = dto.Name,
+                    Surname = dto.Surname
                 };
                 var result = await _userManager.CreateAsync(user, dto.Password);
                 if (!result.Succeeded)

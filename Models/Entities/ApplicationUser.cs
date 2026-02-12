@@ -5,7 +5,7 @@ namespace Rolayther.Models.Entities
     public class ApplicationUser : IdentityUser
     {
         public string Name { get; set; } = null!;
-        public string LastName { get; set; } = null!;
+        public string Surname { get; set; } = null!;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

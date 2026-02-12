@@ -19,7 +19,7 @@ namespace Rolayther.Controllers
             }
 
         // ================== REGISTER ==================
-
+        [AllowAnonymous]
         [HttpPost("register-player")]
         public async Task<IActionResult> RegisterPlayer([FromBody] PlayerRequestDto playerRequestDto)
         {
@@ -48,6 +48,7 @@ namespace Rolayther.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("register-master")]
         public async Task<IActionResult> RegisterMaster([FromBody] MasterRequestDto masterRequestDto)
         {

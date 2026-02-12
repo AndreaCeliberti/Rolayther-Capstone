@@ -68,7 +68,7 @@ public class Session : BaseEntity
 
     public void AddPlayer(Player player)
     {
-        if (CurrentState != SessionState.Published)
+        if (CurrentState != SessionState.Draft)
             throw new InvalidOperationException("Cannot join a session that is not published.");
 
         if (Players.Count >= NumbOfPlayer)

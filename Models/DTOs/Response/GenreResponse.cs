@@ -9,8 +9,6 @@ namespace Rolayther.Models.DTOs.Response
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string? ImageUrl { get; set; }
-        public Guid MasterId { get; set; }
-        public Master? Master { get; set; }
-        public Game? Game { get; set; }
+        
     }
 }

@@ -32,6 +32,20 @@ namespace Rolayther.Controllers
             return Ok(sessions);
         }
 
+        // Get session by id
+        [AllowAnonymous]
+        [HttpGet("GetSessionById/{sessionId}")]
+        public async Task<IActionResult> GetSessionById(Guid sessionId)
+        {
+            var session = await _sessionService.GetSessionById(sessionId);
+            if (session == null)
+            {
+                return NotFound("Session not found.");
+            }
+            return Ok(session);
+        }
+
+
         // Create a new session
 
         [Authorize(Roles = "Admin, Master")]

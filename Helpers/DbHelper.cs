@@ -141,7 +141,7 @@ namespace Rolayther.Helpers
                     ApplicationUser Admin = new ApplicationUser()
                     {
                         Name = "Admin",
-                        LastName = "Rolayther",
+                        Surname = "Rolayther",
                         Email = StringConstants.AdminEmail,
                         UserName = "AdminRolayther",
                         IsDeleted = false,

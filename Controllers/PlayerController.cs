@@ -19,8 +19,8 @@ namespace Rolayther.Controllers
 
         // Get all players
 
-        [Authorize]
-        [Authorize(Roles = "Admin, Master")]
+        
+        [Authorize(Roles = "Admin,Master")]
         [HttpGet("GetAllPlayers")]
         public async Task<IActionResult> GetAllPlayers()
         {
@@ -76,7 +76,7 @@ namespace Rolayther.Controllers
 
         // Get current player's profile
 
-        [Authorize(Roles = "Player, Admin, Master")]
+        [Authorize(Roles = "Player,Admin,Master")]
         [HttpGet("Me")]
         public async Task<IActionResult> Me()
         {
@@ -90,9 +90,9 @@ namespace Rolayther.Controllers
 
             return Ok(new
             {
-                player.PlayerId,
-                player.NickName,
-                player.Email
+                playerId = player.PlayerId,
+                nickName = player.NickName,
+                email = player.Email
             });
         }
 

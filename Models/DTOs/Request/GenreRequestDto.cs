@@ -10,6 +10,6 @@ namespace Rolayther.Models.DTOs.Request
         public string Description { get; set; } = string.Empty;
         [Required]
         public string? ImageUrl { get; set; }
-        public Guid MasterId { get; set; }
+        
     }
 }
