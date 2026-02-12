@@ -38,6 +38,7 @@ export default function MasterCard({ master }) {
         <div className="mt-auto pt-3 small text-muted">
           Sessioni: {master.sessions?.length ?? 0} 
         </div>
+        
       </Card.Body>
     </Card>
   );

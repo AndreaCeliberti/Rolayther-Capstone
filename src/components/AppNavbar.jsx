@@ -20,7 +20,7 @@ export default function AppNavbar({
   openLogin,
   openRegisterPlayer,
   openRegisterMaster,
-  openCreateSession, // ✅ NEW
+  openCreateSession, 
 }) {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -37,9 +37,9 @@ export default function AppNavbar({
 
   const profilePath =
     user?.role === "Player"
-      ? "/profile/player"
+      ? "/playerProfile"
       : user?.role === "Master"
-      ? "/profile/master"
+      ? "/masterProfile"
       : "/admin";
 
   return (
@@ -86,7 +86,7 @@ export default function AppNavbar({
                 className="me-lg-2"
                 onClick={openCreateSession}
               >
-                + Crea Sessione
+                 Crea Sessione
               </Button>
             )}
 
@@ -98,10 +98,10 @@ export default function AppNavbar({
 
                 <NavDropdown title="Registrati" align="end" menuVariant="dark">
                   <NavDropdown.Item onClick={openRegisterPlayer}>
-                    👤 Player
+                     Player
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={openRegisterMaster}>
-                    🧙 Master
+                     Master
                   </NavDropdown.Item>
                 </NavDropdown>
               </>
@@ -121,21 +121,17 @@ export default function AppNavbar({
                 }
               >
                 <NavDropdown.Item as={NavLink} to={profilePath}>
-                  {user.role === "Player" && "👤 Profilo Player"}
-                  {user.role === "Master" && "🧙 Profilo Master"}
-                  {user.role === "Admin" && "🛠️ Dashboard Admin"}
+                  {user.role === "Player" && " Profilo Player"}
+                  {user.role === "Master" && " Profilo Master"}
+                  {user.role === "Admin" && " Dashboard Admin"}
                 </NavDropdown.Item>
 
-                {user.role === "Admin" && (
-                  <NavDropdown.Item as={NavLink} to="/admin" end>
-                    📋 Gestione completa
-                  </NavDropdown.Item>
-                )}
+                
 
                 <NavDropdown.Divider />
 
                 <NavDropdown.Item onClick={handleLogout}>
-                  🚪 Logout
+                   Logout
                 </NavDropdown.Item>
               </NavDropdown>
             )}

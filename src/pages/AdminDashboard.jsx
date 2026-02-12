@@ -32,6 +32,8 @@ import CreatePlayerModal from "../components/admin/CreatePlayerModal";
 import UpdateSessionModal from "../components/admin/UpdateSessionModal";
 import UpdatePlayerModal from "../components/admin/UpdatePlayerModal";
 import UpdateMasterModal from "../components/admin/UpdateMasterModal";
+import ConfirmDeleteModal from "../components/common/ConfirmDeleteModal";
+
 
 export default function AdminDashboard() {
   const { user } = useContext(AuthContext);
@@ -173,72 +175,48 @@ export default function AdminDashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin]);
 
-  // DELETE handlers
-  const confirmAndRun = async (question, action, successMsg) => {
-    if (!window.confirm(question)) return;
-    try {
-      await action();
-      showToast(successMsg, "success");
-      return true;
-    } catch (err) {
-      showToast(parseMsg(err, "Operazione fallita"), "danger");
-      return false;
-    }
-  };
+  // delete modal 
+  const [deleteModal, setDeleteModal] = useState({
+    show: false,
+    type: null, // "session" | "player" | "master" | "game" | "genre" | "platform"
+    item: null,
+  });
+  const [deleting, setDeleting] = useState(false);
 
-  const deleteSession = async (id) => {
-    const ok = await confirmAndRun(
-      "Vuoi davvero eliminare questa sessione?",
-      () => SessionsApi.delete(id),
-      "Sessione eliminata "
-    );
-    if (ok) loadSessions();
-  };
+  const openDelete = (type, item) => setDeleteModal({ show: true, type, item });
+  const closeDelete = () => setDeleteModal({ show: false, type: null, item: null });
 
-  const deletePlayer = async (id) => {
-    const ok = await confirmAndRun(
-      "Vuoi davvero eliminare questo player?",
-      () => PlayersApi.delete(id),
-      "Player eliminato "
-    );
-    if (ok) loadPlayers();
-  };
+  const doDelete = async () => {
+  if (!deleteModal.item) return;
 
-  const deleteMaster = async (id) => {
-    const ok = await confirmAndRun(
-      "Vuoi davvero eliminare questo master?",
-      () => MastersApi.delete(id),
-      "Master eliminato "
-    );
-    if (ok) loadMasters();
-  };
+  setDeleting(true);
+  try {
+    const { type, item } = deleteModal;
 
-  const deleteGame = async (id) => {
-    const ok = await confirmAndRun(
-      "Vuoi davvero eliminare questo gioco?",
-      () => GamesApi.delete(id),
-      "Gioco eliminato "
-    );
-    if (ok) loadGames();
-  };
+    if (type === "session") await SessionsApi.delete(item.sessionId);
+    if (type === "player") await PlayersApi.delete(item.playerId);
+    if (type === "master") await MastersApi.delete(item.masterId);
+    if (type === "game") await GamesApi.delete(item.gameId);
+    if (type === "genre") await GenresApi.delete(item.genreId);
+    if (type === "platform") await PlatformsApi.delete(item.platformId);
 
-  const deleteGenre = async (id) => {
-    const ok = await confirmAndRun(
-      "Vuoi davvero eliminare questo genere?",
-      () => GenresApi.delete(id),
-      "Genere eliminato "
-    );
-    if (ok) loadGenres();
-  };
+    showToast("Eliminato con successo ✅", "success");
+    closeDelete();
 
-  const deletePlatform = async (id) => {
-    const ok = await confirmAndRun(
-      "Vuoi davvero eliminare questa piattaforma?",
-      () => PlatformsApi.delete(id),
-      "Piattaforma eliminata "
-    );
-    if (ok) loadPlatforms();
-  };
+    // refresh tab corretta
+    if (type === "session") loadSessions();
+    if (type === "player") loadPlayers();
+    if (type === "master") loadMasters();
+    if (type === "game") loadGames();
+    if (type === "genre") loadGenres();
+    if (type === "platform") loadPlatforms();
+  } catch (err) {
+    showToast(parseMsg(err, "Eliminazione fallita"), "danger");
+  } finally {
+    setDeleting(false);
+  }
+};
+
 
   // UI helpers
   const TableShell = ({ loading, emptyTitle, emptyHint, children }) => {
@@ -260,6 +238,44 @@ export default function AdminDashboard() {
       </Stack>
     );
   }, []);
+  const deleteTitle = useMemo(() => {
+  switch (deleteModal.type) {
+    case "session":
+      return "Eliminare la sessione?";
+    case "player":
+      return "Eliminare il player?";
+    case "master":
+      return "Eliminare il master?";
+    case "game":
+      return "Eliminare il gioco?";
+    case "genre":
+      return "Eliminare il genere?";
+    case "platform":
+      return "Eliminare la piattaforma?";
+    default:
+      return "Conferma eliminazione";
+  }
+}, [deleteModal.type]);
+
+const deleteBody = useMemo(() => {
+  const i = deleteModal.item;
+  if (!i) return null;
+
+  if (deleteModal.type === "session")
+    return `Stai per eliminare "${i.sessionTitle}". L'operazione non è reversibile.`;
+  if (deleteModal.type === "player")
+    return `Stai per eliminare "${i.nickName}" (${i.email}). L'operazione non è reversibile.`;
+  if (deleteModal.type === "master")
+    return `Stai per eliminare "${i.nickName}" (${i.email}). L'operazione non è reversibile.`;
+  if (deleteModal.type === "game")
+    return `Stai per eliminare "${i.title}". L'operazione non è reversibile.`;
+  if (deleteModal.type === "genre")
+    return `Stai per eliminare "${i.name}". L'operazione non è reversibile.`;
+  if (deleteModal.type === "platform")
+    return `Stai per eliminare "${i.name}". L'operazione non è reversibile.`;
+
+  return "L'operazione non è reversibile.";
+}, [deleteModal.type, deleteModal.item]);
 
   if (!isAdmin) {
     return (
@@ -367,10 +383,11 @@ export default function AdminDashboard() {
                                 <Button
                                   size="sm"
                                   variant="outline-danger"
-                                  onClick={() => deleteSession(s.sessionId)}
+                                  onClick={() => openDelete("session", s)}
                                 >
                                   Cancella
                                 </Button>
+
                               </div>
                             </td>
                           </tr>
@@ -453,10 +470,11 @@ export default function AdminDashboard() {
                                 <Button
                                   size="sm"
                                   variant="outline-danger"
-                                  onClick={() => deletePlayer(p.playerId)}
+                                  onClick={() => openDelete("player", p)}
                                 >
                                   Cancella
                                 </Button>
+
                               </div>
                             </td>
                           </tr>
@@ -537,10 +555,11 @@ export default function AdminDashboard() {
                                 <Button
                                   size="sm"
                                   variant="outline-danger"
-                                  onClick={() => deleteMaster(m.masterId)}
+                                  onClick={() => openDelete("master", m)}
                                 >
                                   Cancella
                                 </Button>
+
                               </div>
                             </td>
                           </tr>
@@ -596,7 +615,7 @@ export default function AdminDashboard() {
                               <Button
                                 size="sm"
                                 variant="outline-danger"
-                                onClick={() => deleteGame(g.gameId)}
+                                onClick={() => openDelete("game", g)}
                               >
                                 Cancella
                               </Button>
@@ -652,7 +671,7 @@ export default function AdminDashboard() {
                               <Button
                                 size="sm"
                                 variant="outline-danger"
-                                onClick={() => deleteGenre(g.genreId)}
+                                onClick={() => openDelete("genre", g)}
                               >
                                 Cancella
                               </Button>
@@ -712,7 +731,7 @@ export default function AdminDashboard() {
                               <Button
                                 size="sm"
                                 variant="outline-danger"
-                                onClick={() => deletePlatform(p.platformId)}
+                                onClick={() => openDelete("platform", p)}
                               >
                                 Cancella
                               </Button>
@@ -782,6 +801,14 @@ export default function AdminDashboard() {
             }}
             master={selectedMaster}
             onUpdated={loadMasters}
+        />
+        <ConfirmDeleteModal
+          show={deleteModal.show}
+          onHide={closeDelete}
+          title={deleteTitle}
+          body={deleteBody}
+          loading={deleting}
+          onConfirm={doDelete}
         />
       </Container>
     </>

@@ -98,8 +98,8 @@ export default function App() {
             <Route path="/games" element={<Games />} />
             <Route path="/genres" element={<Genres />} />
             <Route path="/platforms" element={<Platforms />} />
-            <Route path="/profile/player" element={<PlayerProfile />} />
-            <Route path="/profile/master" element={<MasterProfile />} />
+            <Route path="/playerProfile" element={<PlayerProfile />} />
+            <Route path="/masterProfile" element={<MasterProfile />} />
             <Route
                 path="/admin"element={
               <AdminRoute>

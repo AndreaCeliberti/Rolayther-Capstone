@@ -6,7 +6,7 @@ export const MastersApi = {
   getById: (masterId) =>
     api.get(`/Master/GetMaster/${masterId}`),
 
-  me: () => api.get("/Master/Me"),
+  getMe: () => api.get("/Master/Me"),
 
   create: (payload) =>
     api.post("/Master/CreateMaster", payload),
