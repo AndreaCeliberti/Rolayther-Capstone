@@ -12,15 +12,17 @@ namespace Rolayther.Controllers
     public class MasterController : ControllerBase
     {
         private readonly MasterService _masterService;
+        private readonly SessionService _sessionService;
 
-        public MasterController(MasterService masterService)
+        public MasterController(MasterService masterService, SessionService sessionService)
         {
             _masterService = masterService;
+            _sessionService = sessionService;
         }
 
         //Get all master
 
-        
+
         [AllowAnonymous]
         [HttpGet("GetAllMasters")]
         public async Task<IActionResult> GetAllMasters()
@@ -64,7 +66,7 @@ namespace Rolayther.Controllers
 
         
         [Authorize(Roles = "Admin, Master")]
-        [HttpGet("Me/{email}")]
+        [HttpGet("Me")]
         public async Task<IActionResult> Me()
         {
             var email = User.FindFirstValue(ClaimTypes.Email);
@@ -78,8 +80,12 @@ namespace Rolayther.Controllers
             return Ok(new
             {
                 master.MasterId,
+                master.Name,
+                master.Surname,
                 master.NickName,
-                master.Email
+                master.Email,
+                master.AvatarImgUrl,
+                master.BioMaster
             });
         }
 
@@ -95,6 +101,35 @@ namespace Rolayther.Controllers
                 return NotFound(new { Message = "Master not found." });
 
             return Ok(master);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("{masterId}/Sessions")]
+        public async Task<IActionResult> GetSessionsByMaster(Guid masterId)
+        {
+            // (opzionale ma consigliato) verifica che il master esista
+            var master = await _masterService.GetMasterById(masterId);
+            if (master == null)
+                return NotFound(new { Message = "Master not found." });
+
+            var sessions = await _sessionService.GetSessionsByMasterId(masterId);
+            return Ok(sessions);
+        }
+
+        [Authorize(Roles = "Admin, Master")]
+        [HttpGet("Me/Sessions")]
+        public async Task<IActionResult> GetMySessions()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrWhiteSpace(email))
+                return Unauthorized();
+
+            var master = await _masterService.GetMasterByEmail(email);
+            if (master == null)
+                return NotFound(new { Message = "Master profile not found for this user." });
+
+            var sessions = await _sessionService.GetSessionsByMasterId(master.MasterId);
+            return Ok(sessions);
         }
 
         // Update master

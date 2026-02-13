@@ -71,6 +71,18 @@ namespace Rolayther.Services
             return await SaveAsync();
         }
 
+        public async Task<List<Session>> GetSessionsByMasterId(Guid masterId)
+        {
+            return await _context.Sessions
+                .AsNoTracking()
+                .Where(s => s.MasterId == masterId)
+                .Include(s => s.Game)
+                .Include(s => s.Genre)
+                .Include(s => s.Players)
+                .OrderBy(s => s.ScheduledAt)
+                .ToListAsync();
+        }
+
         // Update Session
 
         public async Task<bool> UpdateSession(Guid sessionId, SessionRequestDto dto)

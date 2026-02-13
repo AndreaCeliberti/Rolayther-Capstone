@@ -96,6 +96,21 @@ namespace Rolayther.Controllers
             });
         }
 
+        // Get session by player
+
+        [Authorize(Roles = "Admin, Player, Master")]
+        [HttpGet("{playerId}/Sessions")]
+        public async Task<IActionResult> GetPlayerSessions(Guid playerId)
+        {
+            var sessions = await _playerService.GetSessionsByPlayerId(playerId);
+
+            if (sessions == null)
+                return NotFound(new { Message = "Player not found." });
+
+            return Ok(sessions);
+        }
+
+
         // Update player
 
         [Authorize(Roles = "Admin, Player")]

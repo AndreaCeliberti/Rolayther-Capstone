@@ -32,7 +32,7 @@ namespace Rolayther.Models.Entities
         public string? BioMaster { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public ICollection<Session> Sessions { get; set; }
+        public ICollection<Session> Sessions { get; set; } = new List<Session>();
 
         public ICollection<MasterGame> MasterGames { get; set; } = new List<MasterGame>();
         public ICollection<MasterPlatform> MasterPlatforms { get; set; } = new List<MasterPlatform>();

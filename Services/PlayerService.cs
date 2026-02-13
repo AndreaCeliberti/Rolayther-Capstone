@@ -66,6 +66,37 @@ namespace Rolayther.Services
                 .FirstOrDefaultAsync(p => p.Email == email);
         }
 
+        // Get session by player id
+        public async Task<List<Session>?> GetSessionsByPlayerId(Guid playerId)
+        {
+            var exists = await _context.Players.AnyAsync(p => p.PlayerId == playerId);
+            if (!exists) return null;
+
+            return await _context.Sessions
+                .AsNoTracking()
+                .Include(s => s.Master)
+                .Include(s => s.Game)
+                .Include(s => s.Genre)
+                .Include(s => s.Players)
+                .Where(s => s.Players.Any(p => p.PlayerId == playerId))
+                .Select(s => new Session
+                {
+                    SessionId = s.SessionId,
+                    SessionTitle = s.SessionTitle,
+                    SessionDescription = s.SessionDescription,
+                    ScheduledAt = s.ScheduledAt,
+                    Duration = s.Duration,
+                    NumbOfPlayer = s.NumbOfPlayer,
+                    CoverImgUrl = s.CoverImgUrl,
+                    Master = s.Master,
+                    Game = s.Game,
+                    Genre = s.Genre,
+                    Players = s.Players
+                })
+                .ToListAsync();
+        }
+
+
         // Update player
         public async Task<bool> UpdatePlayer(Guid playerId, PlayerRequestDto playerRequestDto)
         {

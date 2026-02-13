@@ -59,7 +59,7 @@ namespace Rolayther.Services
         {
             return await _context.Masters
                 .AsNoTracking()
-                .Include(m => m.Sessions)
+                
                 .FirstOrDefaultAsync(m => m.MasterId == masterId);
         }
 
