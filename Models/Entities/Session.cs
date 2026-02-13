@@ -7,6 +7,7 @@ public class Session : BaseEntity
 {
     [Key]
     public Guid SessionId { get; set; }
+    
 
     [Required]
     [MaxLength(100)]
@@ -38,7 +39,12 @@ public class Session : BaseEntity
 
     public ICollection<Player> Players { get; set; } = new List<Player>();
 
-    public SessionState CurrentState { get; private set; } = SessionState.Draft;
+    public SessionState CurrentState { get; set; } = SessionState.Draft;
+
+    public void ChangeState(SessionState newState)
+    {
+        CurrentState = newState;
+    }
     public ICollection<SessionStateHistory> StateHistory { get; set; } = new List<SessionStateHistory>();
 
 
@@ -68,7 +74,7 @@ public class Session : BaseEntity
 
     public void AddPlayer(Player player)
     {
-        if (CurrentState != SessionState.Draft)
+        if (CurrentState != SessionState.Published)
             throw new InvalidOperationException("Cannot join a session that is not published.");
 
         if (Players.Count >= NumbOfPlayer)

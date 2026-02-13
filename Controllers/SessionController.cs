@@ -83,39 +83,29 @@ namespace Rolayther.Controllers
         }
 
 
-        // Delete a session
 
-        [Authorize(Roles = "Admin, Master")]
-        [HttpDelete("DeleteSession/{sessionId}")]
-        public async Task<IActionResult> DeleteSession(Guid sessionId)
-        {
-            var isDeleted = await _sessionService.DeleteSession(sessionId);
-            if (isDeleted)
-            {
-                return Ok(new { Message = "Session deleted Successfully." });
-            }
-            else
-            {
-                return BadRequest(new { Message = "Failed to delete session." });
-            }
-        }
 
         // Change session state
 
-        [Authorize(Roles = "Admin, Master")]
-        [HttpPost("{sessionId}/ChangeState")]
-        public async Task<IActionResult> ChangeState(Guid sessionId, ChangeSessionStateDto dto)
+        [HttpPatch("{sessionId}/ChangeState")]
+        public async Task<IActionResult> ChangeState(Guid sessionId, [FromBody] ChangeSessionStateDto dto)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var role = User.FindFirstValue(ClaimTypes.Role);
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
 
-            var result = await _sessionService.ChangeSessionState(sessionId, dto.NewState, userId, role, dto.Reason);
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(role))
+                return Unauthorized();
 
-            if (!result)
-                return BadRequest("State change failed");
+            await _sessionService.ChangeSessionState(sessionId, dto.NewState, userId, role, dto.Reason);
 
-            return Ok("State updated");
+            return Ok("Stato aggiornato correttamente");
+
         }
+
+
+
+
+
 
         // Join session
 
@@ -144,6 +134,21 @@ namespace Rolayther.Controllers
 
             return Ok(new { Message = "Player removed from session" });
         }
+// Delete a session
 
+        [Authorize(Roles = "Admin, Master")]
+        [HttpDelete("DeleteSession/{sessionId}")]
+        public async Task<IActionResult> DeleteSession(Guid sessionId)
+        {
+            var isDeleted = await _sessionService.DeleteSession(sessionId);
+            if (isDeleted)
+            {
+                return Ok(new { Message = "Session deleted Successfully." });
+            }
+            else
+            {
+                return BadRequest(new { Message = "Failed to delete session." });
+            }
+        }
     }
 }

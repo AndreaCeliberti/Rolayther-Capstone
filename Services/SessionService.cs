@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Rolayther.Data;
 using Rolayther.Models.DTOs.Request;
+using Rolayther.Models.DTOs.Response;
 using Rolayther.Models.Entities;
 using Rolayther.Models.Enums;
 using System.Security.Claims;
@@ -15,26 +16,28 @@ namespace Rolayther.Services
         public async Task<List<Session>> GetAllSessions()
         {
             return await _context.Sessions
-                .AsNoTracking()
-                .Include(s => s.Master)
-                .Include(s => s.Game)
-                .Include(s => s.Genre)
-                .Include(s => s.Players)
-                .Select(s => new Session
-                {
-                    SessionId = s.SessionId,
-                    SessionTitle = s.SessionTitle,
-                    SessionDescription = s.SessionDescription,
-                    ScheduledAt = s.ScheduledAt,
-                    Duration = s.Duration,
-                    NumbOfPlayer = s.NumbOfPlayer,
-                    CoverImgUrl = s.CoverImgUrl,
-                    Master = s.Master,
-                    Game = s.Game,
-                    Genre = s.Genre,
-                    Players = s.Players
-                })
-                .ToListAsync();
+         .AsNoTracking()
+         .Include(s => s.Master)
+         .Include(s => s.Game)
+         .Include(s => s.Genre)
+         .Include(s => s.Players)
+         .Select(s => new Session
+         {
+             SessionId = s.SessionId,
+             SessionTitle = s.SessionTitle,
+             SessionDescription = s.SessionDescription,
+             ScheduledAt = s.ScheduledAt,
+             Duration = s.Duration,
+             NumbOfPlayer = s.NumbOfPlayer,
+             CoverImgUrl = s.CoverImgUrl,
+             Master = s.Master,
+             Game = s.Game,
+             Genre = s.Genre,
+             Players = s.Players,
+
+             CurrentState = s.CurrentState
+         })
+         .ToListAsync();
         }
 
         // Get Session by Id
@@ -105,28 +108,30 @@ namespace Rolayther.Services
         }
 
 
-        //Soft delete
 
-        public Task<bool> DeleteSession(Guid sessionId)
-        {
-            return SoftDeleteAsync<Session>(sessionId);
-        }
 
         // Change Session State
 
-        public async Task<bool> ChangeSessionState(Guid sessionId, SessionState newState, string userId, string role, string? reason)
+        public async Task ChangeSessionState(Guid sessionId, SessionState newState, string userId, string role, string? reason)
         {
             var session = await _context.Sessions
-                .Include(s => s.StateHistory)
                 .FirstOrDefaultAsync(s => s.SessionId == sessionId);
 
-            if (session == null)
-                return false;
+            if (session is null)
+                throw new KeyNotFoundException("Session not found");
 
-            session.ChangeState(newState, userId, role, reason);
+            // (se hai regole di autorizzazione, lasciale qui)
+            // es: if(role != "Master") throw ...
 
-            return await SaveAsync();
+            session.ChangeState(newState);
+
+            // (se registri uno storico, lascialo qui)
+            // _context.SessionStateChanges.Add(new SessionStateChange { ... });
+
+            await _context.SaveChangesAsync();
         }
+
+
 
         // Add player to session
         public async Task<bool> AddPlayerToSession(Guid sessionId, Guid playerId)
@@ -182,6 +187,11 @@ namespace Rolayther.Services
 
             return await SaveAsync();
         }
+  //Soft delete
 
+        public Task<bool> DeleteSession(Guid sessionId)
+        {
+            return SoftDeleteAsync<Session>(sessionId);
+        }
     }
 }

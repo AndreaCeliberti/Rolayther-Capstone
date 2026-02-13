@@ -6,5 +6,6 @@ namespace Rolayther.Models.DTOs.Request
     {
         public SessionState NewState { get; set; }
         public string? Reason { get; set; }
+        
     }
 }

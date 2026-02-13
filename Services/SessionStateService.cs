@@ -6,8 +6,8 @@ namespace Rolayther.Services
     {
         private static readonly Dictionary<SessionState, SessionState[]> _transitions = new()
         {
-            { SessionState.Draft,      new[] { SessionState.Published, SessionState.Cancelled } },
-            { SessionState.Published,  new[] { SessionState.Full, SessionState.Cancelled } },
+            { SessionState.Draft, new[] { SessionState.Published, SessionState.InProgress, SessionState.Cancelled } },
+            { SessionState.Published, new[] { SessionState.Full, SessionState.InProgress, SessionState.Cancelled } },
             { SessionState.Full,       new[] { SessionState.InProgress, SessionState.Cancelled } },
             { SessionState.InProgress, new[] { SessionState.Completed } },
             { SessionState.Completed,  Array.Empty<SessionState>() },
