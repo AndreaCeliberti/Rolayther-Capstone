@@ -38,7 +38,9 @@ export default function SessionDetails() {
   const loadSession = async () => {
     setLoading(true);
     try {
+      
       const res = await SessionsApi.getById(id);
+      
       setSession(res.data || null);
     } catch (err) {
       const msg =
@@ -79,6 +81,8 @@ export default function SessionDetails() {
   const seatsTaken = players.length;
   const seatsAvailable = Math.max(0, (maxPlayers || 0) - seatsTaken);
   const isFull = maxPlayers > 0 && seatsTaken >= maxPlayers;
+
+  const sessionLink = session?.sessionLink || session?.SessionLink;  
 
   const canJoin = isPlayer && !!mePlayerId && !joined && !isFull;
   const canLeave = isPlayer && !!mePlayerId && joined;
@@ -126,7 +130,7 @@ export default function SessionDetails() {
         subtitle="Informazioni complete e partecipazione."
         actions={
           <Button as={Link} to="/sessions" variant="outline-secondary">
-            ← Torna alle sessioni
+             Torna alle sessioni
           </Button>
         }
       />
@@ -261,8 +265,24 @@ export default function SessionDetails() {
                           Sei già iscritto a questa sessione.
                         </div>
                       )}
+                      
                     </div>
+                    
                   )}
+                  {joined && sessionLink && (
+                      <div className="mt-3 d-flex flex-wrap gap-2">
+                        <Button
+                          as="a"
+                          href={sessionLink}
+                          target="_blank"
+                          rel="noreferrer"
+                          variant="outline-primary"
+                        >
+                           Partecipa alla Sessione
+                        </Button>
+                      </div>
+                    )}
+
                 </Card.Body>
               </Card>
             </Col>

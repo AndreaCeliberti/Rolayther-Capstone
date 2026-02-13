@@ -18,6 +18,7 @@ const initial = {
   masterId: "",
   gameId: "",
   genreId: "",
+  sessionLink: "",
 };
 
 export default function CreateSessionModal({ show, handleClose, onCreated }) {
@@ -130,6 +131,7 @@ export default function CreateSessionModal({ show, handleClose, onCreated }) {
         masterId: form.masterId,
         gameId: form.gameId,
         genreId: form.genreId,
+        sessionLink: form.sessionLink?.trim() ? form.sessionLink.trim() : null,
       };
 
       await SessionsApi.create(payload);
@@ -211,6 +213,20 @@ export default function CreateSessionModal({ show, handleClose, onCreated }) {
                     onChange={onChange}
                     required
                   />
+                </Form.Group>
+              </Col>
+              <Col xs={12}>
+                <Form.Group>
+                  <Form.Label>Link alla piattaforma di gioco</Form.Label>
+                  <Form.Control
+                    name="sessionLink"
+                    value={form.sessionLink}
+                    onChange={onChange}
+                    placeholder="https://discord.gg/... "
+                  />
+                  <Form.Text className="">
+                    Verrà mostrato come pulsante nella pagina dettagli sessione.
+                  </Form.Text>
                 </Form.Group>
               </Col>
 

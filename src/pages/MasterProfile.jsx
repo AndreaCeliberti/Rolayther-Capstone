@@ -172,11 +172,11 @@ export default function MasterProfile() {
                   </div>
 
                   {sessions.length === 0 ? (
-                    <div className="text-muted small">
+                    <div className="small">
                       Non hai ancora sessioni collegate al tuo profilo.
                     </div>
                   ) : (
-                    <ListGroup variant="flush">
+                    <ListGroup variant="flush rol-item ">
                       {sessions
                         .slice()
                         .sort((a, b) => {
@@ -189,7 +189,7 @@ export default function MasterProfile() {
                           return da - db;
                         })
                         .map((s) => (
-                          <ListGroup.Item key={s.sessionId} className="px-0">
+                          <ListGroup.Item key={s.sessionId} className="px-0 rol-item ">
                             <div className="d-flex justify-content-between align-items-start gap-2">
                               <div>
                                 <div className="fw-semibold">

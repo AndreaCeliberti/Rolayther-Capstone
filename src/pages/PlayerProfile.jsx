@@ -93,7 +93,7 @@ export default function PlayerProfile() {
                 <Card.Body>
                   <div className="d-flex justify-content-between align-items-center mb-2">
                     <h5 className="mb-0">Sessioni a cui partecipi</h5>
-                    <span className="text-muted small">Totale: {sessions.length}</span>
+                    <span className=" small">Totale: {sessions.length}</span>
                   </div>
 
                   {sessions.length === 0 ? (
@@ -105,10 +105,10 @@ export default function PlayerProfile() {
                           <div className="rol-item d-flex justify-content-between align-items-start gap-2">
                             <div>
                               <div className="fw-semibold">{s.sessionTitle}</div>
-                              <div className="text-muted small">
+                              <div className=" small">
                                 {s.scheduledAt ? new Date(s.scheduledAt).toLocaleString() : "—"} • {s.duration}
                               </div>
-                              <div className="text-muted small">
+                              <div className=" small">
                                 {s.game?.title ? `🎮 ${s.game.title} · ` : ""}
                                 {s.genre?.name ? `🏷️ ${s.genre.name}` : ""}
                               </div>
