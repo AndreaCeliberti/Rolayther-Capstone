@@ -3,6 +3,8 @@ import { Badge, Button, Form, InputGroup, Spinner } from "react-bootstrap";
 import { ToastContext } from "../context/ToastContext";
 import { SessionsApi } from "../api/sessions.api";
 import { stateBadgeVariant, stateLabel, STATE_LABELS } from "../utils/sessionState";
+import { allowedNextStates } from "../utils/sessionState";
+
 
 export default function SessionStateControl({ session, onUpdated }) {
   const { showToast } = useContext(ToastContext);
@@ -16,6 +18,9 @@ export default function SessionStateControl({ session, onUpdated }) {
   const current = useMemo(() => Number(initialState), [initialState]);
   const selected = useMemo(() => Number(newState), [newState]);
   const changed = selected !== current;
+  const nextStates = allowedNextStates(current);
+  const options = [current, ...nextStates];
+
 
   const handleSave = async () => {
     if (!changed) return;
@@ -27,7 +32,7 @@ export default function SessionStateControl({ session, onUpdated }) {
         reason: reason?.trim() ? reason.trim() : null,
       });
 
-      showToast(`Stato aggiornato: ${stateLabel(selected)} ✅`, "success");
+      showToast(`Stato aggiornato: ${stateLabel(selected)} `, "success");
       setReason("");
       onUpdated?.();
     } catch (err) {
@@ -52,15 +57,16 @@ export default function SessionStateControl({ session, onUpdated }) {
 
       <InputGroup>
         <Form.Select
-          value={selected}
-          onChange={(e) => setNewState(Number(e.target.value))}
+        value={selected}
+        onChange={(e) => setNewState(Number(e.target.value))}
         >
-          {Object.entries(STATE_LABELS).map(([k, label]) => (
-            <option key={k} value={Number(k)}>
-              {label}
+        {options.map((st) => (
+            <option key={st} value={st}>
+            {stateLabel(st)}
             </option>
-          ))}
+        ))}
         </Form.Select>
+
 
         <Button
           variant={changed ? "primary" : "outline-secondary"}

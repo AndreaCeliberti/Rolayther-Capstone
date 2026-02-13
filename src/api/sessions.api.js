@@ -14,7 +14,7 @@ export const SessionsApi = {
   delete: (sessionId) => api.delete(`/Session/DeleteSession/${sessionId}`),
 
   changeState: (sessionId, payload) =>
-    api.post(`/Session/${sessionId}/ChangeState`, payload),
+    api.patch(`/Session/${sessionId}/ChangeState`, payload),
 
   join: (sessionId, playerId) =>
     api.post(`/Session/${sessionId}/Join/${playerId}`),

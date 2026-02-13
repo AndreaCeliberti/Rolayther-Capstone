@@ -33,3 +33,16 @@ export function stateBadgeVariant(state) {
     default: return "secondary";
   }
 }
+export const ALLOWED_TRANSITIONS = {
+  0: [1, 5],     // Draft -> Published, Cancelled
+  1: [2, 5],     // Published -> Full, Cancelled
+  2: [3, 5],     // Full -> InProgress, Cancelled
+  3: [4],        // InProgress -> Completed
+  4: [],         // Completed -> none
+  5: [],         // Cancelled -> none
+};
+
+export function allowedNextStates(currentState) {
+  const s = Number(currentState ?? 0);
+  return ALLOWED_TRANSITIONS[s] ?? [];
+}
