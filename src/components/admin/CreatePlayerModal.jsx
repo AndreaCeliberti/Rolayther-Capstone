@@ -93,9 +93,9 @@ export default function CreatePlayerModal({ show, handleClose, onCreated }) {
     return (
       <Modal show={show} onHide={closeAndReset} centered animation>
         <Modal.Header closeButton>
-          <Modal.Title>Accesso negato</Modal.Title>
+          <Modal.Title className="text-white">Accesso negato</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="text-muted">Solo gli Admin possono creare player.</Modal.Body>
+        <Modal.Body className="text-white">Solo gli Admin possono creare player.</Modal.Body>
       </Modal>
     );
   }
@@ -110,11 +110,11 @@ export default function CreatePlayerModal({ show, handleClose, onCreated }) {
       size="lg"
       contentClassName="border-0 shadow"
     >
-      <Modal.Header closeButton className="border-0 pb-0">
-        <Modal.Title className="fw-semibold">+ Crea Player</Modal.Title>
+      <Modal.Header closeButton className="border-0 pb-0 text-white">
+        <Modal.Title className="fw-semibold"> Crea Player</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body className="pt-2">
+      <Modal.Body className="pt-2 text-white">
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <Row className="g-3">
             <Col xs={12} md={6}>

@@ -83,13 +83,13 @@ export default function CreateGenreModal({ show, handleClose, onCreated }) {
 
   return (
     <Modal show={show} onHide={closeAndReset} centered animation backdrop="static">
-      <Modal.Header closeButton>
+      <Modal.Header closeButton className="text-white">
         <Modal.Title>+ Crea Genere</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body>
+      <Modal.Body className="text-white">
         {!isAdmin ? (
-          <div className="text-muted">
+          <div className="text-white">
             <div className="fw-semibold mb-1">Accesso negato</div>
             Solo gli Admin possono creare generi.
           </div>

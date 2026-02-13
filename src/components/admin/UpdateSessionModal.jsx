@@ -180,7 +180,7 @@ export default function UpdateSessionModal({ show, handleClose, onUpdated, sessi
         <Modal.Header closeButton>
           <Modal.Title>Accesso negato</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="text-muted">Solo gli Admin possono modificare sessioni.</Modal.Body>
+        <Modal.Body className="">Solo gli Admin possono modificare sessioni.</Modal.Body>
       </Modal>
     );
   }
@@ -195,17 +195,17 @@ export default function UpdateSessionModal({ show, handleClose, onUpdated, sessi
       size="lg"
       contentClassName="border-0 shadow"
     >
-      <Modal.Header closeButton className="border-0 pb-0">
+      <Modal.Header closeButton className="border-0 pb-0 text-white">
         <Modal.Title className="fw-semibold">✏️ Modifica Sessione</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body className="pt-2">
+      <Modal.Body className="pt-2 text-white">
         {!session ? (
-          <div className="text-muted">Nessuna sessione selezionata.</div>
+          <div className="">Nessuna sessione selezionata.</div>
         ) : loadingRefs ? (
           <div className="text-center py-5">
             <Spinner animation="border" />
-            <div className="text-muted small mt-2">Caricamento dati…</div>
+            <div className=" small mt-2">Caricamento dati…</div>
           </div>
         ) : (
           <Form noValidate validated={validated} onSubmit={handleSubmit}>

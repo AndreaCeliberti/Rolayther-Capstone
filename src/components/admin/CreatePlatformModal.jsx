@@ -85,11 +85,11 @@ export default function CreatePlatformModal({ show, handleClose, onCreated }) {
 
   return (
     <Modal show={show} onHide={closeAndReset} centered animation backdrop="static">
-      <Modal.Header closeButton>
-        <Modal.Title>+ Crea Piattaforma</Modal.Title>
+      <Modal.Header className="text-white" closeButton>
+        <Modal.Title> Crea Piattaforma</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body>
+      <Modal.Body className="text-white">
         {!isAdmin ? (
           <div className="text-muted">
             <div className="fw-semibold mb-1">Accesso negato</div>

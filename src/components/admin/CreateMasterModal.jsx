@@ -131,7 +131,7 @@ export default function CreateMasterModal({ show, handleClose, onCreated }) {
       animation
       backdrop="static"
       size="lg"
-      contentClassName="border-0 shadow"
+      contentClassName="border-0 shadow text-white"
     >
       <Modal.Header closeButton className="border-0 pb-0">
         <Modal.Title className="fw-semibold">+ Crea Master</Modal.Title>

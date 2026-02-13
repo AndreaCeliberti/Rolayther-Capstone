@@ -156,7 +156,7 @@ export default function UpdateMasterModal({
         <Modal.Header closeButton>
           <Modal.Title>Accesso negato</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="text-muted">
+        <Modal.Body className="">
           Solo gli Admin possono modificare i master.
         </Modal.Body>
       </Modal>
@@ -173,17 +173,17 @@ export default function UpdateMasterModal({
       size="lg"
       contentClassName="border-0 shadow"
     >
-      <Modal.Header closeButton className="border-0 pb-0">
+      <Modal.Header closeButton className="border-0 pb-0 text-white">
         <Modal.Title className="fw-semibold">✏️ Modifica Master</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body className="pt-2">
+      <Modal.Body className="pt-2 text-white">
         {!master ? (
-          <div className="text-muted">Nessun master selezionato.</div>
+          <div className="">Nessun master selezionato.</div>
         ) : loadingFull ? (
           <div className="text-center py-5">
             <Spinner animation="border" />
-            <div className="text-muted small mt-2">Caricamento dati…</div>
+            <div className=" small mt-2">Caricamento dati…</div>
           </div>
         ) : (
           <Form noValidate validated={validated} onSubmit={handleSubmit}>

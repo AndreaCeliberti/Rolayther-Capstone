@@ -109,12 +109,12 @@ export default function RegisterMasterModal({ show, handleClose, openLogin }) {
       backdrop="static"
       contentClassName="border-0 shadow"
     >
-      <Modal.Header closeButton className="border-0 pb-0">
+      <Modal.Header closeButton className="border-0 pb-0 text-white">
         <Modal.Title className="fw-semibold">Registrazione Master</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body className="pt-2">
-        <p className="text-muted small mb-3">
+      <Modal.Body className="pt-2 text-white">
+        <p className=" small mb-3 ">
           Crea il tuo profilo Master per pubblicare e gestire sessioni.
         </p>
 

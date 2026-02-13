@@ -88,13 +88,13 @@ export default function CreateGameModal({ show, handleClose, onCreated }) {
 
   return (
     <Modal show={show} onHide={closeAndReset} centered animation backdrop="static">
-      <Modal.Header closeButton>
+      <Modal.Header closeButton className="text-white">
         <Modal.Title>+ Crea Gioco</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body>
+      <Modal.Body className="text-white">
         {!isAdmin ? (
-          <div className="text-muted">
+          <div className="text-white">
             <div className="fw-semibold mb-1">Accesso negato</div>
             Solo gli Admin possono creare giochi.
           </div>
