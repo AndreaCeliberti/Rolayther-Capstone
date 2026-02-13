@@ -200,7 +200,7 @@ export default function AdminDashboard() {
     if (type === "genre") await GenresApi.delete(item.genreId);
     if (type === "platform") await PlatformsApi.delete(item.platformId);
 
-    showToast("Eliminato con successo ✅", "success");
+    showToast("Eliminato con successo ", "success");
     closeDelete();
 
     // refresh tab corretta
@@ -280,7 +280,7 @@ const deleteBody = useMemo(() => {
   if (!isAdmin) {
     return (
       <>
-        <PageHeader title="Admin Dashboard" subtitle="Area riservata" />
+        <PageHeader  title="Admin Dashboard" subtitle="Area riservata" />
         <Container fluid="md" className="pb-4 px-3 px-md-0">
           <EmptyState
             icon="⛔"
@@ -301,7 +301,7 @@ const deleteBody = useMemo(() => {
       />
 
       <Container fluid="lg" className="pb-4 px-3 px-md-0">
-        <Card className="border-0 shadow-sm">
+        <Card  className="border-0 shadow-sm">
           <Card.Body>
             <Tabs
               activeKey={activeKey}
@@ -309,9 +309,9 @@ const deleteBody = useMemo(() => {
               className="mb-3"
             >
               {/* SESSIONS */}
-              <Tab eventKey="sessions" title={`Session (${sessions.length})`}>
+              <Tab  eventKey="sessions" title={`Session (${sessions.length})`}>
                 <div className="d-flex justify-content-between align-items-center mb-3 gap-2 flex-wrap">
-                  <div className="text-muted small">
+                  <div className=" small">
                     Gestisci tutte le sessioni (crea/modifica/cancella).
                   </div>
                   <div className="d-flex gap-2 flex-wrap">
@@ -343,20 +343,20 @@ const deleteBody = useMemo(() => {
                   />
                 ) : (
                   <div className="table-responsive">
-                    <Table hover className="align-middle">
-                      <thead>
-                        <tr>
-                          <th>Titolo</th>
+                    <Table style={{ color: "var(--muted)" }} hover variant="dark" className="align-middle table-dark">
+                      <thead className="table-dark">
+                        <tr style={{ color: "var(--muted)" }}>
+                          <th style={{ color: "var(--muted)" }}>Titolo</th>
                           <th>Data</th>
                           <th>Durata</th>
                           <th>Players</th>
                           <th className="text-end">Azioni</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody >
                         {sessions.map((s) => (
                           <tr key={s.sessionId}>
-                            <td className="fw-semibold">{s.sessionTitle}</td>
+                            <td className=" fw-semibold">{s.sessionTitle}</td>
                             <td>
                               {s.scheduledAt
                                 ? new Date(s.scheduledAt).toLocaleString()
@@ -397,7 +397,7 @@ const deleteBody = useMemo(() => {
                   </div>
                 )}
 
-                {/* TODO: CreateSessionModal */}
+                {/* CreateSessionModal */}
                 {showCreateSession && (
                   <div className="text-muted small mt-3">
                     <Button onClick={() => setShowCreateSession(true)}>Crea</Button> 
@@ -437,7 +437,7 @@ const deleteBody = useMemo(() => {
                   />
                 ) : (
                   <div className="table-responsive">
-                    <Table hover className="align-middle">
+                    <Table hover variant="dark" className="align-middle">
                       <thead>
                         <tr>
                           <th>Nick</th>
@@ -523,7 +523,7 @@ const deleteBody = useMemo(() => {
                   />
                 ) : (
                   <div className="table-responsive">
-                    <Table hover className="align-middle">
+                    <Table hover variant="dark" className="align-middle">
                       <thead>
                         <tr>
                           <th>Nick</th>
@@ -600,7 +600,7 @@ const deleteBody = useMemo(() => {
                   <EmptyState title="Nessun gioco" hint="Crea il primo gioco." icon="🎮" />
                 ) : (
                   <div className="table-responsive">
-                    <Table hover className="align-middle">
+                    <Table hover variant="dark" className="align-middle">
                       <thead>
                         <tr>
                           <th>Titolo</th>
@@ -656,7 +656,7 @@ const deleteBody = useMemo(() => {
                   <EmptyState title="Nessun genere" hint="Crea il primo genere." icon="🏷️" />
                 ) : (
                   <div className="table-responsive">
-                    <Table hover className="align-middle">
+                    <Table hover variant="dark" className="align-middle">
                       <thead>
                         <tr>
                           <th>Nome</th>
@@ -716,7 +716,7 @@ const deleteBody = useMemo(() => {
                   />
                 ) : (
                   <div className="table-responsive">
-                    <Table hover className="align-middle">
+                    <Table hover variant="dark" className="align-middle">
                       <thead>
                         <tr>
                           <th>Nome</th>

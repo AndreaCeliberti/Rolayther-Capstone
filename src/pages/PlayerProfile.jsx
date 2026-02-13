@@ -97,12 +97,12 @@ export default function PlayerProfile() {
                   </div>
 
                   {sessions.length === 0 ? (
-                    <div className="text-muted small">Non hai ancora partecipato a nessuna sessione.</div>
+                    <div className="rol-item text-muted small">Non hai ancora partecipato a nessuna sessione.</div>
                   ) : (
                     <ListGroup variant="flush">
                       {sessions.map((s) => (
-                        <ListGroup.Item key={s.sessionId} className="px-0">
-                          <div className="d-flex justify-content-between align-items-start gap-2">
+                        <ListGroup.Item key={s.sessionId} className="rol-item px-0">
+                          <div className="rol-item d-flex justify-content-between align-items-start gap-2">
                             <div>
                               <div className="fw-semibold">{s.sessionTitle}</div>
                               <div className="text-muted small">

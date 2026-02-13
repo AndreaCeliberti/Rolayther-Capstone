@@ -1,161 +1,164 @@
+/* src/theme.css */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
-:root {
-  color-scheme: dark;
+:root{
+  --bg-0:#0b0712;
+  --bg-1:#0e0a18;
 
-  /* Brand palette */
-  --r-bg-0: #05050a;
-  --r-bg-1: #0a0712;
-  --r-bg-2: #120a1f;
+  --text:#f3f0ff;
+  --muted:rgba(243,240,255,.72);
 
-  --r-text: rgba(255,255,255,.92);
-  --r-text-muted: rgba(255, 255, 255, 0.91);
+  --primary:#8b5cf6;
+  --primary-2:#a78bfa;
 
-  --r-accent: #53f1ff;  /* cyan */
-  --r-violet: #8b5cf6;  /* purple */
+  --surface:rgba(18,12,30,.72);
+  --surface-2:rgba(18,12,30,.55);
+  --border:rgba(167,120,255,.18);
 
-  --r-surface: rgba(255,255,255,.04);
-  --r-surface-2: rgba(255,255,255,.06);
-  --r-border: rgba(255,255,255,.10);
+  --shadow: 0 12px 30px rgba(0,0,0,.45);
+  --shadow-soft: 0 10px 24px rgba(0,0,0,.35);
 
-  --r-shadow-1: 0 10px 30px rgba(0,0,0,.45);
-  --r-shadow-2: 0 16px 44px rgba(0,0,0,.55);
-  --r-focus: rgba(83,241,255,.35);
+  --radius: 18px;
+  --radius-sm: 14px;
 
-  /* Bootstrap vars (works on BS 5.2+ / 5.3 best) */
-  --bs-body-color: var(--r-text);
-  --bs-body-bg: var(--r-bg-0);
-
-  --bs-link-color: #7aa6ff;
-  --bs-link-hover-color: var(--r-accent);
-
-  --bs-border-color: var(--r-border);
-
-  /* If you’re on Bootstrap 5.3+, these help a lot */
-  --bs-primary: var(--r-accent);
-  --bs-secondary: var(--r-violet);
+  --glow: 0 0 0 1px var(--border), 0 0 28px rgba(139,92,246,.18);
 }
 
-/* Body background (immersive but UX-friendly) */
-body {
+html, body, #root { height: 100%; }
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
   background:
-    radial-gradient(1200px 700px at 50% 35%, rgba(139, 92, 246, 0.12), transparent 60%),
-    radial-gradient(900px 520px at 50% 80%, rgba(83, 241, 255, 0.06), transparent 55%),
-    linear-gradient(135deg, var(--r-bg-0), var(--r-bg-1), var(--r-bg-2));
-  color: var(--r-text);
+    radial-gradient(900px 520px at 55% 45%, rgba(139,92,246,.35), transparent 60%),
+    radial-gradient(1200px 900px at 20% 30%, rgba(59,7,100,.25), transparent 60%),
+    linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%);
+  background-attachment: fixed;
 }
 
-/* Optional wrapper for centered landing screens */
-.center-screen {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
+/* ✅ layout per footer sempre in fondo */
+.app-shell{
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.app-main{
+  flex: 1;
 }
 
-/* Typography tweaks (keep system font, slightly more “brand”) */
-h1, h2, h3 {
-  letter-spacing: .01em;
-}
-h1 {
-  font-size: clamp(2rem, 3.5vw, 3.2rem);
-  line-height: 1.08;
-}
+/* === Bootstrap “skin” === */
+a{ color: var(--primary-2); }
+a:hover{ color: var(--primary); }
 
-/* Links */
-a {
-  text-decoration: none;
-  transition: color .15s ease, text-shadow .15s ease;
-}
-a:hover {
-  text-shadow: 0 0 14px rgba(83,241,255,.18);
-}
-
-/* Buttons (Bootstrap .btn + variants) */
-.btn {
-  border-radius: 12px;
-  border-color: var(--r-border);
-  box-shadow: var(--r-shadow-1);
-  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
-}
-.btn:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--r-shadow-2);
-}
-.btn:focus,
-.btn:focus-visible {
-  box-shadow: 0 0 0 .25rem var(--r-focus), var(--r-shadow-1) !important;
-}
-
-/* Primary button (cyan neon controlled) */
-.btn-primary {
-  --bs-btn-bg: rgba(83,241,255,.14);
-  --bs-btn-border-color: rgba(83,241,255,.35);
-  --bs-btn-color: var(--r-text);
-  --bs-btn-hover-bg: rgba(83,241,255,.20);
-  --bs-btn-hover-border-color: rgba(83,241,255,.55);
-  --bs-btn-active-bg: rgba(83,241,255,.24);
-  --bs-btn-active-border-color: rgba(83,241,255,.60);
-}
-
-/* Secondary (violet) */
-.btn-secondary {
-  --bs-btn-bg: rgba(139,92,246,.16);
-  --bs-btn-border-color: rgba(139,92,246,.35);
-  --bs-btn-color: var(--r-text);
-  --bs-btn-hover-bg: rgba(139,92,246,.22);
-  --bs-btn-hover-border-color: rgba(139,92,246,.55);
-}
-
-/* Cards */
-.card, .master-card {
-  background: linear-gradient(180deg, var(--r-surface), rgba(255,255,255,0.02));
-  border: 1px solid var(--r-border);
-  border-radius: 16px;
-  box-shadow: var(--r-shadow-1);
-}
-.master-card {
-  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
-}
-.master-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(139,92,246,.25);
-  box-shadow: var(--r-shadow-2);
-}
-
-/* Inputs */
-.form-control, .form-select {
-  background-color: rgba(0,0,0,.35);
-  border-color: var(--r-border);
-  color: var(--r-text);
-  border-radius: 12px;
-}
-.form-control:focus, .form-select:focus {
-  border-color: rgba(83,241,255,.45);
-  box-shadow: 0 0 0 .25rem var(--r-focus);
-}
-
-/* Navbar (if used) */
-.navbar, .navbar.bg-body-tertiary {
-  background: rgba(0,0,0,.35) !important;
+.card, .modal-content, .dropdown-menu{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
-/* Footer socials */
-.footer-social {
+.table{
+  color: var(--text);
+}
+.table thead th{
+  color: var(--muted);
+  border-bottom-color: rgba(255,255,255,.08);
+}
+.table td, .table th{
+  border-top-color: rgba(255,255,255,.06);
+}
+.table-hover tbody tr:hover{
+  background: rgba(139,92,246,.08);
+}
+
+.form-control, .form-select{
+  background: rgba(10,7,18,.55);
+  border: 1px solid rgba(255,255,255,.10);
+  color: var(--text);
+  border-radius: 14px;
+}
+.form-control:focus, .form-select:focus{
+  border-color: rgba(167,120,255,.45);
+  box-shadow: 0 0 0 .2rem rgba(139,92,246,.20);
+  background: rgba(10,7,18,.65);
+  color: var(--text);
+}
+.form-control::placeholder{ color: rgba(243,240,255,.45); }
+
+.btn{
+  border-radius: 14px;
+}
+.btn-primary{
+  background: linear-gradient(135deg, var(--primary), #6d28d9);
+  border: 1px solid rgba(167,120,255,.35);
+  box-shadow: 0 10px 24px rgba(139,92,246,.20);
+}
+.btn-primary:hover{
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+.btn-outline-secondary{
+  border-color: rgba(255,255,255,.16);
+  color: var(--text);
+}
+.btn-outline-secondary:hover{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.22);
+}
+
+.badge{
   border-radius: 999px;
-  border: 1px solid transparent;
-  background: rgba(255,255,255,.03);
-  transition: transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
 }
-.footer-social:hover {
-  transform: translateY(-2px);
-  background: rgba(83,241,255,.06);
-  border-color: rgba(83,241,255,.22);
-  box-shadow: 0 .35rem .9rem rgba(0,0,0,.35);
+.badge.bg-light{
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.shadow-sm{ box-shadow: var(--shadow-soft) !important; }
+.border-0{ border: 0 !important; }
+
+/* Navbar glass */
+.navbar{
+  background: rgba(10,7,18,.45) !important;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  backdrop-filter: blur(10px);
+}
+.navbar .nav-link{
+  color: rgba(243,240,255,.80) !important;
+}
+.navbar .nav-link:hover{
+  color: var(--text) !important;
+}
+.navbar-brand{
+  letter-spacing: .3px;
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
+/* Cards hover “glow” */
+.hover-glow{
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+.hover-glow:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow), var(--glow);
+  border-color: rgba(167,120,255,.32);
+}
+
+/* Modals: animazione leggera */
+.modal.fade .modal-dialog{
+  transform: translateY(10px) scale(.98);
+  transition: transform .18s ease;
+}
+.modal.show .modal-dialog{
+  transform: translateY(0) scale(1);
+}
+
+/* Toast */
+.toast{
+  background: rgba(18,12,30,.82) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+.modal-header .btn-close {
+  filter: invert(1);
 }

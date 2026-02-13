@@ -12,7 +12,7 @@ export default function SessionCard({ session }) {
     : "—";
 
   return (
-    <Card className="h-100 shadow-sm border-0">
+    <Card className="h-100 shadow-sm border-1">
       {session.coverImgUrl && (
         <Card.Img
           variant="top"
@@ -21,7 +21,7 @@ export default function SessionCard({ session }) {
         />
       )}
 
-      <Card.Body className="d-flex flex-column">
+      <Card.Body className="d-flex flex-column" style={{ color: "var(--muted)" }}>
         <div className="d-flex justify-content-between align-items-start gap-2">
           <Card.Title className="fs-5 mb-1">{session.sessionTitle}</Card.Title>
           <Badge bg={isFull ? "danger" : "success"}>
@@ -32,7 +32,7 @@ export default function SessionCard({ session }) {
           </Badge>
         </div>
 
-        <Card.Text className="text-muted small mb-2">
+        <Card.Text style={{ color: "var(--muted)" }} className=" small mb-2">
           {scheduled} • durata: {session.duration}
         </Card.Text>
 
@@ -42,7 +42,7 @@ export default function SessionCard({ session }) {
         </Card.Text>
 
         <div className="mt-auto d-flex justify-content-between align-items-center">
-          <span className="small text-muted">
+          <span style={{ color: "var(--muted)" }} className="small">
             👥 {playersCount}/{maxPlayers || "∞"}
           </span>
 

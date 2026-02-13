@@ -185,10 +185,16 @@ export default function SessionDetails() {
                         {session.master?.nickName && (
                           <Badge bg="secondary">Mastered by {session.master.nickName}</Badge>
                         )}
+                      <div className=" d-flex align-items-center gap-2">
+                        <Badge bg={stateBadgeVariant(session.currentState)}>
+                          {stateLabel(session.currentState)}
+                        </Badge>
+                      </div>
                       </div>
                     </div>
-
+                    
                     <div className="text-sm-end">
+                      
                       <Badge bg={isFull ? "danger" : "success"} className="fs-6">
                         👥 {seatsTaken}/{maxPlayers}
                       </Badge>
@@ -219,11 +225,7 @@ export default function SessionDetails() {
                     <div className="text-muted small">Caricamento profilo…</div>
                   ) : (
                     <div className="d-flex flex-column flex-sm-row gap-2">
-                      <div className="d-flex align-items-center gap-2 mb-2">
-                        <Badge bg={stateBadgeVariant(session.currentState)}>
-                          {stateLabel(session.currentState)}
-                        </Badge>
-                      </div>
+                     
                       <Button
                         variant="success"
                         onClick={handleJoin}
@@ -279,7 +281,7 @@ export default function SessionDetails() {
                       Nessun player iscritto per ora.
                     </div>
                   ) : (
-                    <ListGroup variant="flush" className="rol-players">
+                    <ListGroup variant="flush" className="rol-players bg-dark">
                       {players.map((p) => {
                         const pid = p.playerId || p.PlayerId;
 
@@ -294,9 +296,9 @@ export default function SessionDetails() {
                         return (
                           <ListGroup.Item
                             key={pid}
-                            className={`px-0 py-2 d-flex align-items-center ${mine ? "is-mine" : ""}`}
+                            className={`rol-item px-0 py-2 d-flex align-items-center ${mine ? "is-mine" : ""}`}
                           >
-                            <div className="d-flex justify-content-between align-items-center w-100">
+                            <div className="d-flex justify-content-between align-items-center w-100 rol-item">
                               <div className="d-flex align-items-center gap-2 text-truncate" style={{ maxWidth: 240 }}>
                                 {mine && <span className="rol-star" aria-hidden="true">★</span>}
                                 <span className="rol-name">{label}</span>

@@ -47,7 +47,7 @@ export default function App() {
     <AuthProvider>
       <ToastProvider>
         <BrowserRouter>
-          <div className="d-flex flex-column min-vh-100">
+          <div className="app-shell theme-dark">
     <AppNavbar
       openLogin={() => setShowLogin(true)}
       openRegisterPlayer={() => setShowRegPlayer(true)}
@@ -93,7 +93,7 @@ export default function App() {
     />
 
     {/* CONTENUTO PAGINE */}
-    <main className="flex-grow-1">
+    <main className="app-main">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/sessions/:id" element={<SessionDetails />} />

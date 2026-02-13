@@ -18,17 +18,17 @@ export default function ConfirmDeleteModal({
       centered
       animation
       backdrop="static"
-      contentClassName="border-0 shadow"
+      contentClassName="border-1 shadow"
     >
-      <Modal.Header closeButton={!loading} className="border-0 pb-0">
+      <Modal.Header closeButton={!loading} className="border-1 pb-0">
         <Modal.Title className="fw-semibold">{title}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body className="pt-2">
         {body ? (
-          <div className="text-muted">{body}</div>
+          <div style={{ color: "var(--muted)" }}>{body}</div>
         ) : (
-          <div className="text-muted">
+          <div style={{ color: "var(--muted)" }}>
             Sei sicuro? Questa operazione non è reversibile.
           </div>
         )}

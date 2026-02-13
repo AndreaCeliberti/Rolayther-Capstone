@@ -2,7 +2,7 @@ import { Card } from "react-bootstrap";
 
 export default function PlatformCard({ platform }) {
   return (
-    <Card className="h-100 shadow-sm border-0">
+    <Card style={{ color: "var(--muted)" }} className="h-100 shadow-sm border-1">
       <Card.Body className="d-flex flex-column">
         <div className="d-flex align-items-center gap-3">
           <div
@@ -22,7 +22,7 @@ export default function PlatformCard({ platform }) {
 
           <div>
             <div className="fw-semibold">{platform.name}</div>
-            <div className="text-muted small">
+            <div className=" small">
               {(platform.description || "—").slice(0, 70)}
               {(platform.description || "").length > 70 ? "…" : ""}
             </div>

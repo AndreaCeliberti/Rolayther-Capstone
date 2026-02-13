@@ -64,9 +64,9 @@ export default function Home() {
     <Container fluid="md" className="mt-4 px-3 px-md-0">
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
         <div>
-          <h1 className="mb-1 text-center text-md-start">Benvenuto su Rolayther</h1>
-          <p className="text-muted text-center text-md-start mb-0">
-            Scopri le sessioni disponibili e partecipa!
+          <h1 className="mb-1 text-center text-md-start">Benvenuto!</h1>
+          <p style={{ color: "var(--muted)" }} className=" text-center text-md-start mb-0">
+            Unisciti ai <strong>Rolayther</strong> e vivi un avventura!
           </p>
         </div>
 

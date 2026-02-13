@@ -22,17 +22,17 @@ export default function LoginModal({ show, handleClose, openRegisterPlayer, open
   };
 
   return (
-    <Modal
+    <Modal 
       show={show}
       onHide={handleClose}
       centered
       animation   
     >
       <Modal.Header closeButton>
-        <Modal.Title>Accedi</Modal.Title>
+        <Modal.Title style={{ color: "var(--muted)" }}>Accedi</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body>
+      <Modal.Body style={{ color: "var(--muted)" }}>
         <Form onSubmit={handleLogin}>
           <Form.Group className="mb-3">
             <Form.Label>Email</Form.Label>
