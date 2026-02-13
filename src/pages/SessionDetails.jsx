@@ -15,7 +15,7 @@ import PageHeader from "../components/common/PageHeader";
 import EmptyState from "../components/common/EmptyState";
 import { ToastContext } from "../context/ToastContext";
 import { AuthContext } from "../context/AuthContext";
-
+import { stateBadgeVariant, stateLabel } from "../utils/sessionState";
 import { SessionsApi } from "../api/sessions.api";
 import { PlayersApi } from "../api/players.api";
 
@@ -23,7 +23,6 @@ export default function SessionDetails() {
   const { id } = useParams(); // sessionId (Guid)
   const { showToast } = useContext(ToastContext);
   const { user } = useContext(AuthContext);
-  console.log("USER CONTEXT:", user);
 
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
@@ -182,9 +181,7 @@ export default function SessionDetails() {
                         {session.genre?.name && (
                           <Badge bg="secondary"> {session.genre.name}</Badge>
                         )}
-                        {session.platform?.name && (
-                          <Badge bg="secondary">Osted on {session.platform.name}</Badge>
-                        )}
+                        
                         {session.master?.nickName && (
                           <Badge bg="secondary">Mastered by {session.master.nickName}</Badge>
                         )}
@@ -222,6 +219,11 @@ export default function SessionDetails() {
                     <div className="text-muted small">Caricamento profilo…</div>
                   ) : (
                     <div className="d-flex flex-column flex-sm-row gap-2">
+                      <div className="d-flex align-items-center gap-2 mb-2">
+                        <Badge bg={stateBadgeVariant(session.currentState)}>
+                          {stateLabel(session.currentState)}
+                        </Badge>
+                      </div>
                       <Button
                         variant="success"
                         onClick={handleJoin}
@@ -248,7 +250,7 @@ export default function SessionDetails() {
                             Leave…
                           </>
                         ) : (
-                          "🚪 Leave sessione"
+                          "Lascia sessione"
                         )}
                       </Button>
 
@@ -277,9 +279,10 @@ export default function SessionDetails() {
                       Nessun player iscritto per ora.
                     </div>
                   ) : (
-                    <ListGroup variant="flush">
+                    <ListGroup variant="flush" className="rol-players">
                       {players.map((p) => {
                         const pid = p.playerId || p.PlayerId;
+
                         const label =
                           p.nickName ||
                           p.NickName ||
@@ -289,18 +292,27 @@ export default function SessionDetails() {
                         const mine = mePlayerId && pid === mePlayerId;
 
                         return (
-                          <ListGroup.Item key={pid} className="px-0">
-                            <div className="d-flex justify-content-between align-items-center">
-                              <div className="text-truncate" style={{ maxWidth: 220 }}>
-                                {mine ? "⭐ " : ""}
-                                {label}
+                          <ListGroup.Item
+                            key={pid}
+                            className={`px-0 py-2 d-flex align-items-center ${mine ? "is-mine" : ""}`}
+                          >
+                            <div className="d-flex justify-content-between align-items-center w-100">
+                              <div className="d-flex align-items-center gap-2 text-truncate" style={{ maxWidth: 240 }}>
+                                {mine && <span className="rol-star" aria-hidden="true">★</span>}
+                                <span className="rol-name">{label}</span>
                               </div>
-                              {mine && <Badge bg="primary">Tu</Badge>}
+
+                              {mine && (
+                                <Badge pill bg="primary" className="rol-badge">
+                                  Tu
+                                </Badge>
+                              )}
                             </div>
                           </ListGroup.Item>
                         );
                       })}
                     </ListGroup>
+
                   )}
                 </Card.Body>
               </Card>

@@ -9,6 +9,7 @@ import {
 } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import logo from "../assets/InsegnaRolayther.png";
 
 function roleBadgeVariant(role) {
   if (role === "Admin") return "warning";
@@ -45,8 +46,17 @@ export default function AppNavbar({
   return (
     <Navbar bg="dark" variant="dark" expand="lg" sticky="top" className="shadow-sm">
       <Container>
-        <Navbar.Brand as={NavLink} to="/" className="fw-bold">
-           Rolayther
+        <Navbar.Brand
+          as={NavLink}
+          to="/"
+          className="d-flex align-items-center"
+        >
+          <img
+            src={logo}
+            alt="Rolayther Logo"
+            className="img-fluid"
+            style={{ maxHeight: "50px" }}
+          />
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="main-navbar" />
@@ -98,10 +108,10 @@ export default function AppNavbar({
 
                 <NavDropdown title="Registrati" align="end" menuVariant="dark">
                   <NavDropdown.Item onClick={openRegisterPlayer}>
-                     Player
+                     Become a Player
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={openRegisterMaster}>
-                     Master
+                     Be a Master
                   </NavDropdown.Item>
                 </NavDropdown>
               </>
@@ -121,8 +131,8 @@ export default function AppNavbar({
                 }
               >
                 <NavDropdown.Item as={NavLink} to={profilePath}>
-                  {user.role === "Player" && " Profilo Player"}
-                  {user.role === "Master" && " Profilo Master"}
+                  {user.role === "Player" && " Profilo "}
+                  {user.role === "Master" && " Profilo "}
                   {user.role === "Admin" && " Dashboard Admin"}
                 </NavDropdown.Item>
 

@@ -66,3 +66,73 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.navbar-brand img {
+  transition: filter .2s ease, transform .2s ease;
+}
+
+.navbar-brand:hover img {
+  filter: drop-shadow(0 0 8px rgba(83, 241, 255, 0.35));
+  transform: scale(1.03);
+}
+
+.master-card {
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.master-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.12) !important;
+}
+
+.footer-social {
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: rgba(255,255,255,.03);
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.footer-social:hover {
+  transform: translateY(-2px);
+  background: rgba(83,241,255,.06);
+  border-color: rgba(83,241,255,.22);
+  box-shadow: 0 .35rem .9rem rgba(0,0,0,.10);
+}
+/* Players list — Rolayther style */
+.rol-players .list-group-item {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.rol-players .list-group-item:last-child {
+  border-bottom: 0;
+}
+
+.rol-players .rol-name {
+  color: rgba(255,255,255,.88);
+}
+
+.rol-players .rol-star {
+  color: rgba(83,241,255,.95);
+  filter: drop-shadow(0 0 10px rgba(83,241,255,.20));
+  transform: translateY(-1px);
+}
+
+.rol-players .rol-badge {
+  background: rgba(83,241,255,.14) !important;
+  border: 1px solid rgba(83,241,255,.35);
+  color: rgba(255,255,255,.92);
+}
+
+/* Highlight "mine" subtly (immersive, not loud) */
+.rol-players .list-group-item.is-mine {
+  background: linear-gradient(
+    90deg,
+    rgba(83,241,255,.06),
+    rgba(139,92,246,.05),
+    transparent 70%
+  );
+  border-bottom-color: rgba(83,241,255,.14);
+  border-radius: 12px;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}

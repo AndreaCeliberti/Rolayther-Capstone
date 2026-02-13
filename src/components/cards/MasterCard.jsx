@@ -1,8 +1,12 @@
 import { Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 export default function MasterCard({ master }) {
   return (
-    <Card className="h-100 shadow-sm border-0">
+    <Card as={Link}
+      to={`/masters/${master.masterId}`}
+      className="h-100 shadow-sm border-0 text-decoration-none text-dark master-card"
+      style={{ cursor: "pointer" }}>
       <Card.Body className="d-flex flex-column">
         <div className="d-flex align-items-center gap-3">
           <div

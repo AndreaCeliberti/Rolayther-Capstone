@@ -8,6 +8,10 @@ export const MastersApi = {
 
   getMe: () => api.get("/Master/Me"),
 
+  getMySessions: () => api.get("/Master/Me/Sessions"),
+  
+  getSessions: (masterId) => api.get(`/Master/${masterId}/Sessions`),
+
   create: (payload) =>
     api.post("/Master/CreateMaster", payload),
 

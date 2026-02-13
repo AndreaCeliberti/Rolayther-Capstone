@@ -1,5 +1,6 @@
-import { Card, Badge } from "react-bootstrap";
+import { Card, Badge, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { stateBadgeVariant, stateLabel } from "../../utils/sessionState";
 
 export default function SessionCard({ session }) {
   const playersCount = session.players?.length ?? 0;
@@ -26,6 +27,9 @@ export default function SessionCard({ session }) {
           <Badge bg={isFull ? "danger" : "success"}>
             {isFull ? "Full" : "Open"}
           </Badge>
+          <Badge bg={stateBadgeVariant(session.currentState)} className="ms-auto">
+            {stateLabel(session.currentState)}
+          </Badge>
         </div>
 
         <Card.Text className="text-muted small mb-2">
@@ -42,9 +46,14 @@ export default function SessionCard({ session }) {
             👥 {playersCount}/{maxPlayers || "∞"}
           </span>
 
-          <Link className="small text-decoration-none" to={`/sessions/${session.sessionId}`}>
-            Dettagli 
-          </Link>
+          <Button
+            as={Link}
+            to={`/sessions/${session.sessionId}`}
+            variant="primary"
+            size="sm"
+          >
+            Partecipa
+          </Button>
         </div>
       </Card.Body>
     </Card>

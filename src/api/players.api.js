@@ -8,6 +8,8 @@ export const PlayersApi = {
   
   getMe: () => api.get("/Player/Me"),
 
+  getSessions: (playerId) => api.get(`/Player/${playerId}/Sessions`),
+
   create: (payload) =>
     api.post("/Player/CreatePlayer", payload),
 
