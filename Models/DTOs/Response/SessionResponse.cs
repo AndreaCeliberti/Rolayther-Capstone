@@ -11,6 +11,7 @@ namespace Rolayther.Models.DTOs.Response
         public DateTime ScheduledAt { get; set; }
         public string Duration { get; set; } = string.Empty;
         public int NumbOfPlayer { get; set; }
+        public string? SessionLink { get; set; }
         public string? CoverImgUrl { get; set; }
         public Guid MasterId { get; set; }
         public Guid GameId { get; set; }

@@ -26,6 +26,8 @@ public class Session : BaseEntity
     [Required]
     public int NumbOfPlayer { get; set; }
 
+    public string? SessionLink { get; set; }
+
     public string? CoverImgUrl { get; set; }
 
     public Guid MasterId { get; set; }

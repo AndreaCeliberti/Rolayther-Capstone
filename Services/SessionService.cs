@@ -29,6 +29,7 @@ namespace Rolayther.Services
              ScheduledAt = s.ScheduledAt,
              Duration = s.Duration,
              NumbOfPlayer = s.NumbOfPlayer,
+             SessionLink = s.SessionLink,
              CoverImgUrl = s.CoverImgUrl,
              Master = s.Master,
              Game = s.Game,
@@ -64,6 +65,7 @@ namespace Rolayther.Services
                 ScheduledAt = sessionRequestDto.ScheduledAt,
                 Duration = sessionRequestDto.Duration,
                 NumbOfPlayer = sessionRequestDto.NumbOfPlayer,
+                SessionLink = sessionRequestDto.SessionLink,
                 CoverImgUrl = sessionRequestDto.CoverImgUrl,
                 MasterId = sessionRequestDto.MasterId,
                 GameId = sessionRequestDto.GameId,
@@ -98,6 +100,7 @@ namespace Rolayther.Services
             session.ScheduledAt = dto.ScheduledAt;
             session.Duration = dto.Duration;
             session.NumbOfPlayer = dto.NumbOfPlayer;
+            session.SessionLink = dto.SessionLink;
             session.CoverImgUrl = dto.CoverImgUrl;
             session.MasterId = dto.MasterId;
             session.GameId = dto.GameId;
